@@ -101,6 +101,21 @@ body {
   height: 125px;
   width: 125px;
 }
+.hidden{
+  display: none;
+}
+#black{
+  color: rgba(0, 0, 0, 1);
+}
+#red{
+  color: rgba(255, 0, 0, 1);
+}
+#blue{
+  color: rgba(0, 0, 255, 1);
+}
+#yellow{
+  color: rgba(255, 255, 0, 1);
+}
 
 
 /*
