@@ -1,9 +1,14 @@
 /*jshint esversion: 6 */
 $(document).ready( function () {
 
+  const WHITE = 'rgba(255, 255, 255, 255)';
+
   let canvas = document.getElementById("canvas");
   let context = canvas.getContext("2d");
+  let color = new Color();
+  let filter = new Filter();
   let pressed = false;
+  let pickedColor = WHITE;
 
   function loadCanvas() {
     let imgData=context.createImageData(canvas.height, canvas.width);
@@ -19,17 +24,17 @@ $(document).ready( function () {
 		context.putImageData(imgData,100,100);
   }
 
-  canvas.mousedown(function() {
-    pressed = true;
-  });
-
-  canvas.mousemove(function() {
-
-  });
-
-  canvas.mouseup(function() {
-    pressed = false;
-  });
+  // canvas.mousedown(function(e) {
+  //   pressed = true;
+  // });
+  //
+  // canvas.mousemove(function(e) {
+  //
+  // });
+  //
+  // canvas.mouseup(function(e) {
+  //   pressed = false;
+  // });
 
   $("#open").on('change', function(e) {
     let reader = new FileReader();
@@ -52,6 +57,12 @@ $(document).ready( function () {
 
   });
 
+  $('.colors').on('click', function () {
+    $('.colors').removeClass('active');
+    pickedColor = color.get(this.id);
+    $(this).addClass('active');
+  });
+
   let filters = document.querySelector('.filters');
   filters.addEventListener('click', function(e) {
     if (e.target !== e.currentTarget) {
@@ -61,7 +72,6 @@ $(document).ready( function () {
     }
     e.stopPropagation();
   }, false);
-
 });
 
 function fitImage(image) {
@@ -111,22 +121,35 @@ function erase() {
   context.stroke();
 }
 
-class color {
+class Color {
   constructor() {
-    this.colorValues = {
-      'black': 'rgba(0, 0, 0, 255)',
-      'red': 'rgba(255, 0, 0, 255)',
-      'blue': 'rgba(0, 0, 255, 255)',
-      'yellow': 'rgba(255, 255, 0, 255)',
-    };
+    this.black = 'rgba(0, 0, 0, 255)';
+    this.red = 'rgba(255, 0, 0, 255)';
+    this.blue = 'rgba(0, 0, 255, 255)';
+    this.yellow = 'rgba(255, 255, 0, 255)';
   }
 
   get(color){
-    return this.colorValues.color;
+    let result;
+    switch (color) {
+      case 'black':
+        result =  this.black;
+        break;
+      case 'red':
+        result =  this.red;
+        break;
+      case 'blue':
+        result =  this.blue;
+        break;
+      case 'yellow':
+        result = this.yellow;
+        break;
+    }
+    return result;
   }
 }
 
-class filter {
+class Filter {
 
   bw(){
 
