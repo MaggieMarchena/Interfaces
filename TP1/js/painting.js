@@ -154,20 +154,52 @@ class Filter {
     this.y = 0;
   }
 
-  setImageData(x, y, image){
-    this.imageData = context.getImageData(x, y, image.width, image.height);
+  setImageData(x, y, width, height){
+    this.imageData = context.getImageData(x, y, width, height);
     this.x = x;
     this.y = y;
   }
 
-  bw(){
-    for(i=0; i < imageData.data.length; i+=4){
-        let color = (imageData.data[i] + imageData.data[i+1] + imageData.data[i+2]) / 3;
-        imageData.data[i] = color;
-        imageData.data[i+1] = color;
-        imageData.data[i+2] = color;
+  reset(){
+    this.imageData = context.getImageData(0,0,canvas.width, canvas.height);
+    this.x = 0;
+    this.y = 0;
+  }
+
+  transform(filter){
+    switch (filter) {
+      case 'bw':
+        this.bw();
+        break;
+      case 'sepia':
+        this.sepia();
+        break;
+      case 'sepia':
+        this.sepia();
+        break;
+      case 'negative':
+        this.negative();
+        break;
+      case 'sat':
+        this.sat();
+        break;
+      case 'contrast':
+        this.contrast();
+        break;
+      case 'blur':
+        this.blur();
+        break;
     }
-    context.putImageData(imagedata, this.x, this.y);
+  }
+
+  bw(){
+    for(let i=0; i < this.imageData.data.length; i+=4){
+        let color = (this.imageData.data[i] + this.imageData.data[i+1] + this.imageData.data[i+2]) / 3;
+        this.imageData.data[i] = color;
+        this.imageData.data[i+1] = color;
+        this.imageData.data[i+2] = color;
+    }
+    context.putImageData(this.imageData, this.x, this.y);
   }
 
   sepia(){
@@ -216,6 +248,7 @@ $(document).ready( function() {
 			}
   	}
 		context.putImageData(imgData,0,0);
+    filter.reset();
   }
 
   canvas.addEventListener('mousedown', function(e) {
@@ -246,6 +279,7 @@ $(document).ready( function() {
         let values = fitImage(img);
         context.drawImage(img, values.x, values.y, values.imageWidth, values.imageHeight);
         filter.setImageData(values.x, values.y, values.imageWidth, values.imageHeight);
+        base = canvas.toDataURL();
       };
       img.src = event.target.result;
     };
@@ -280,7 +314,6 @@ $(document).ready( function() {
 
   $('.filters').on('click', function(e) {
     e.preventDefault();
-    filter.set();
     filter.transform(this.name);
   });
 });
