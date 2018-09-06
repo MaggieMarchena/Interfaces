@@ -1,6 +1,7 @@
 /*jshint esversion: 6 */
 
 const WHITE = 'rgba(255, 255, 255, 255)';
+const FULL = 255;
 
 class Mouse {
   constructor() {
@@ -198,16 +199,32 @@ class Filter {
         this.imageData.data[i] = color;
         this.imageData.data[i+1] = color;
         this.imageData.data[i+2] = color;
+        this.imageData.data[i+3] = FULL;
     }
     context.putImageData(this.imageData, this.x, this.y);
   }
 
   sepia(){
-
+    for(let i=0; i < this.imageData.data.length; i+=4){
+        let r = (this.imageData.data[i] * 0.393) + (this.imageData.data[i+2] * 0.769) + (this.imageData.data[i+2] * 0.189);
+        let g = (this.imageData.data[i] * 0.349) + (this.imageData.data[i+2] * 0.686) + (this.imageData.data[i+2] * 0.168);
+        let b = (this.imageData.data[i] * 0.272) + (this.imageData.data[i+2] * 0.534) + (this.imageData.data[i+2] * 0.131);
+        this.imageData.data[i] = r;
+        this.imageData.data[i+1] = g;
+        this.imageData.data[i+2] = b;
+        this.imageData.data[i+3] = FULL;
+    }
+    context.putImageData(this.imageData, this.x, this.y);
   }
 
   negative(){
-
+    for(let i=0; i < this.imageData.data.length; i+=4){
+        this.imageData.data[i] = 255 - this.imageData.data[i];
+        this.imageData.data[i+1] = 255 - this.imageData.data[i+1];
+        this.imageData.data[i+2] = 255 - this.imageData.data[i+2];
+        this.imageData.data[i+3] = 255;
+    }
+    context.putImageData(this.imageData, this.x, this.y);
   }
 
   sat(){
@@ -215,7 +232,15 @@ class Filter {
   }
 
   contrast(){
-
+    let C = 200;
+    let factor = (259 * (C + 225)) / (255 * (259 - C));
+    for(let i=0; i < this.imageData.data.length; i+=4){
+        this.imageData.data[i] = factor * (this.imageData.data[i] - 128) - 128;
+        this.imageData.data[i+1] = factor * (this.imageData.data[i+1] - 128) - 128;
+        this.imageData.data[i+2] = factor * (this.imageData.data[i+2] - 128) - 128;
+        this.imageData.data[i+3] = 255;
+    }
+    context.putImageData(this.imageData, this.x, this.y);
   }
 
   blur(){
