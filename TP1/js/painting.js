@@ -251,8 +251,6 @@ class Filter {
 let canvas = document.getElementById("canvas");
 let context = canvas.getContext("2d");
 
-let base = null;
-
 let color = new Color();
 let filter = new Filter();
 let pencil = new Pencil();
@@ -304,7 +302,6 @@ $(document).ready( function() {
         let values = fitImage(img);
         context.drawImage(img, values.x, values.y, values.imageWidth, values.imageHeight);
         filter.setImageData(values.x, values.y, values.imageWidth, values.imageHeight);
-        base = canvas.toDataURL();
       };
       img.src = event.target.result;
     };
@@ -314,7 +311,7 @@ $(document).ready( function() {
   $("#start").on('click', loadCanvas());
 
   $("#save").on('click', function() {
-
+    saveImage();
   });
 
   $("#pencil").on('click', function() {
@@ -373,4 +370,10 @@ function fitImage(image) {
   }
 
   return values;
+}
+
+function saveImage() {
+  let link = document.getElementById('save');
+  link.setAttribute('href', canvas.toDataURL());
+  link.setAttribute('download', 'image.png');
 }
