@@ -195,52 +195,147 @@ class Filter {
 
   bw(){
     for(let i=0; i < this.imageData.data.length; i+=4){
-        let color = (this.imageData.data[i] + this.imageData.data[i+1] + this.imageData.data[i+2]) / 3;
-        this.imageData.data[i] = color;
-        this.imageData.data[i+1] = color;
-        this.imageData.data[i+2] = color;
-        this.imageData.data[i+3] = FULL;
+      let color = (this.imageData.data[i] + this.imageData.data[i+1] + this.imageData.data[i+2]) / 3;
+      this.imageData.data[i] = color;
+      this.imageData.data[i+1] = color;
+      this.imageData.data[i+2] = color;
+      this.imageData.data[i+3] = FULL;
     }
     context.putImageData(this.imageData, this.x, this.y);
   }
 
   sepia(){
     for(let i=0; i < this.imageData.data.length; i+=4){
-        let r = (this.imageData.data[i] * 0.393) + (this.imageData.data[i+2] * 0.769) + (this.imageData.data[i+2] * 0.189);
-        let g = (this.imageData.data[i] * 0.349) + (this.imageData.data[i+2] * 0.686) + (this.imageData.data[i+2] * 0.168);
-        let b = (this.imageData.data[i] * 0.272) + (this.imageData.data[i+2] * 0.534) + (this.imageData.data[i+2] * 0.131);
-        this.imageData.data[i] = r;
-        this.imageData.data[i+1] = g;
-        this.imageData.data[i+2] = b;
-        this.imageData.data[i+3] = FULL;
+      let r = (this.imageData.data[i] * 0.393) + (this.imageData.data[i+2] * 0.769) + (this.imageData.data[i+2] * 0.189);
+      let g = (this.imageData.data[i] * 0.349) + (this.imageData.data[i+2] * 0.686) + (this.imageData.data[i+2] * 0.168);
+      let b = (this.imageData.data[i] * 0.272) + (this.imageData.data[i+2] * 0.534) + (this.imageData.data[i+2] * 0.131);
+      this.imageData.data[i] = r;
+      this.imageData.data[i+1] = g;
+      this.imageData.data[i+2] = b;
+      this.imageData.data[i+3] = FULL;
     }
     context.putImageData(this.imageData, this.x, this.y);
   }
 
   negative(){
     for(let i=0; i < this.imageData.data.length; i+=4){
-        this.imageData.data[i] = 255 - this.imageData.data[i];
-        this.imageData.data[i+1] = 255 - this.imageData.data[i+1];
-        this.imageData.data[i+2] = 255 - this.imageData.data[i+2];
-        this.imageData.data[i+3] = 255;
+      this.imageData.data[i] = 255 - this.imageData.data[i];
+      this.imageData.data[i+1] = 255 - this.imageData.data[i+1];
+      this.imageData.data[i+2] = 255 - this.imageData.data[i+2];
+      this.imageData.data[i+3] = FULL;
     }
     context.putImageData(this.imageData, this.x, this.y);
-  }
-
-  sat(){
-
   }
 
   contrast(){
     let C = 200;
     let factor = (259 * (C + 225)) / (255 * (259 - C));
     for(let i=0; i < this.imageData.data.length; i+=4){
-        this.imageData.data[i] = factor * (this.imageData.data[i] - 128) - 128;
-        this.imageData.data[i+1] = factor * (this.imageData.data[i+1] - 128) - 128;
-        this.imageData.data[i+2] = factor * (this.imageData.data[i+2] - 128) - 128;
-        this.imageData.data[i+3] = 255;
+      this.imageData.data[i] = factor * (this.imageData.data[i] - 128) - 128;
+      this.imageData.data[i+1] = factor * (this.imageData.data[i+1] - 128) - 128;
+      this.imageData.data[i+2] = factor * (this.imageData.data[i+2] - 128) - 128;
+      this.imageData.data[i+3] = FULL;
     }
     context.putImageData(this.imageData, this.x, this.y);
+  }
+
+  sat(){
+    for(let i=0; i < this.imageData.data.length; i+=4){
+      let R = this.imageData.data[i] / FULL;
+      let G = this.imageData.data[i+1] / FULL;
+      let B = this.imageData.data[i+2] / FULL;
+      let min = Math.min(R, G, B);
+      let max = Math.max(R, G, B);
+
+      let L = (min + max) / 2;
+      L = L.toFixed(2);
+
+      let S = 0;
+      if (L < 0.5) {
+        S = (max - min) / (max + min);
+        S = S.toFixed(2);
+      }
+      else {
+        S = (max - min) / (2 - max - min);
+        S = S.toFixed(2);
+      }
+
+      let H = 0;
+      if (min != max) {
+        if (max == R) {
+          H = Math.round(((G - B) / (max - min)) * 60);
+        }
+        else if (max == G) {
+          H = Math.round((2 + (B - R) / (max - min)) * 60);
+        }
+        else if (max == B) {
+          H = Math.round((4 + (R - G) / (max - min)) * 60);
+        }
+      }
+
+      S += 0.2;
+
+      let temp1 = 0;
+      let temp2 = 0;
+      if (S == 0) {
+        R = G = B = S * FULL;
+      }
+      else {
+        if (L < 0.5) {
+          temp1 = L * (1 + S);
+        }
+        else {
+          temp1 = L + S - (L * S);
+        }
+        temp2 = (2 * L)  - temp1;
+        H = H / 360;
+      }
+
+      let tempR = H + 0.333;
+      if (tempR < 0) {
+        tempR += 1;
+      }
+      else if (tempR > 1) {
+        tempR -= 1;
+      }
+
+      let tempG = H;
+      if (tempG < 0) {
+        tempG += 1;
+      }
+      else if (tempG > 1) {
+        tempG -= 1;
+      }
+
+      let tempB = H + 0.333;
+      if (tempB < 0) {
+        tempB += 0;
+      }
+      else if (tempB > 1) {
+        tempB += 1;
+      }
+
+      let newR = 0;
+      if ((6 * tempR) < 1) {
+        newR = temp2 + (temp1 - temp2) * 6 * tempR;
+      }
+      else {
+        if ((2 * tempR) < 1) {
+        newR = temp1;
+        }
+        else if (3 * tempR < 2) {
+          newR = temp2 + (temp1 - temp2) * (0.666 - tempR) * 6;
+        }
+        else {
+          newR = temp2;
+        }
+      }
+
+      this.imageData.data[i] = factor * (this.imageData.data[i] - 128) - 128;
+      this.imageData.data[i+1] = factor * (this.imageData.data[i+1] - 128) - 128;
+      this.imageData.data[i+2] = factor * (this.imageData.data[i+2] - 128) - 128;
+      this.imageData.data[i+3] = FULL;
+    }
   }
 
   blur(){
