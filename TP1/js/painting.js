@@ -240,41 +240,55 @@ class Filter {
   }
 
   sat(){
+    //source: http://www.niwa.nu/2013/05/math-behind-colorspace-conversions-rgb-hsl/
     for(let i=0; i < this.imageData.data.length; i+=4){
+      //get original values
       let R = this.imageData.data[i] / FULL;
       let G = this.imageData.data[i+1] / FULL;
       let B = this.imageData.data[i+2] / FULL;
+
+      //convert to HSL
       let min = Math.min(R, G, B);
       let max = Math.max(R, G, B);
 
       let L = (min + max) / 2;
-      L = L.toFixed(2);
 
       let S = 0;
       if (L < 0.5) {
         S = (max - min) / (max + min);
-        S = S.toFixed(2);
       }
       else {
         S = (max - min) / (2 - max - min);
-        S = S.toFixed(2);
       }
 
       let H = 0;
-      if (min != max) {
+      if (max != min) {
         if (max == R) {
-          H = Math.round(((G - B) / (max - min)) * 60);
+          H = ((G - B) / (max - min)) * 60;
         }
         else if (max == G) {
-          H = Math.round((2 + (B - R) / (max - min)) * 60);
+          H = (2 + (B - R) / (max - min)) * 60;
         }
         else if (max == B) {
-          H = Math.round((4 + (R - G) / (max - min)) * 60);
+          H = (4 + (R - G) / (max - min)) * 60;
         }
       }
 
-      S += 0.2;
+      if(H < 0){
+        H  = Math.abs(H);
+      }
 
+      //add saturation
+      // if (S < 0) {
+      //   S /= -2;
+      // }
+      // else {
+      //   S *= 2;
+      // }
+      S += 0.5 * S;
+
+
+      //convert back to RGB
       let temp1 = 0;
       let temp2 = 0;
       if (S == 0) {
@@ -287,9 +301,10 @@ class Filter {
         else {
           temp1 = L + S - (L * S);
         }
-        temp2 = (2 * L)  - temp1;
-        H = H / 360;
       }
+      temp2 = (2 * L)  - temp1;
+
+      H /= 360;
 
       let tempR = H + 0.333;
       if (tempR < 0) {
@@ -307,7 +322,7 @@ class Filter {
         tempG -= 1;
       }
 
-      let tempB = H + 0.333;
+      let tempB = H - 0.333;
       if (tempB < 0) {
         tempB += 0;
       }
@@ -315,27 +330,20 @@ class Filter {
         tempB += 1;
       }
 
-      let newR = 0;
-      if ((6 * tempR) < 1) {
-        newR = temp2 + (temp1 - temp2) * 6 * tempR;
-      }
-      else {
-        if ((2 * tempR) < 1) {
-        newR = temp1;
-        }
-        else if (3 * tempR < 2) {
-          newR = temp2 + (temp1 - temp2) * (0.666 - tempR) * 6;
-        }
-        else {
-          newR = temp2;
-        }
-      }
+      let newR = testRGB(tempR, temp1, temp2);
+      let newG = testRGB(tempG, temp1, temp2);
+      let newB = testRGB(tempB, temp1, temp2);
 
-      this.imageData.data[i] = factor * (this.imageData.data[i] - 128) - 128;
-      this.imageData.data[i+1] = factor * (this.imageData.data[i+1] - 128) - 128;
-      this.imageData.data[i+2] = factor * (this.imageData.data[i+2] - 128) - 128;
+      //apply to pixel data
+      this.imageData.data[i] = Math.round(newR * FULL);
+      this.imageData.data[i+1] = Math.round(newG * FULL);
+      this.imageData.data[i+2] = Math.round(newB * FULL);
       this.imageData.data[i+3] = FULL;
+
+      //only to check if code is still running
+      console.log(1);
     }
+    context.putImageData(this.imageData, this.x, this.y);
   }
 
   blur(){
@@ -471,4 +479,23 @@ function saveImage() {
   let link = document.getElementById('save');
   link.setAttribute('href', canvas.toDataURL());
   link.setAttribute('download', 'image.png');
+}
+
+function testRGB(tColor, t1, t2) {
+  let color = 0;
+  if ((6 * tColor) < 1) {
+    color = t2 + (t1 - t2) * 6 * tColor;
+  }
+  else {
+    if ((2 * tColor) < 1) {
+    color = t1;
+    }
+    else if (3 * tColor < 2) {
+      color = t2 + (t1 - t2) * (0.666 - tColor) * 6;
+    }
+    else {
+      color = t2;
+    }
+  }
+  return color;
 }
