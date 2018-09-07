@@ -278,15 +278,7 @@ class Filter {
         H  = Math.abs(H);
       }
 
-      //add saturation
-      // if (S < 0) {
-      //   S /= -2;
-      // }
-      // else {
-      //   S *= 2;
-      // }
       S += 0.5 * S;
-
 
       //convert back to RGB
       let temp1 = 0;
