@@ -153,18 +153,24 @@ class Filter {
     this.imageData = context.getImageData(0,0,canvas.width, canvas.height);
     this.x = 0;
     this.y = 0;
+    this.width = 700;
+    this.height = 500;
   }
 
   setImageData(x, y, width, height){
     this.imageData = context.getImageData(x, y, width, height);
     this.x = x;
     this.y = y;
+    this.width = width;
+    this.height = height;
   }
 
   reset(){
     this.imageData = context.getImageData(0,0,canvas.width, canvas.height);
     this.x = 0;
     this.y = 0;
+    this.width = 700;
+    this.height = 500;
   }
 
   transform(filter){
@@ -339,7 +345,53 @@ class Filter {
   }
 
   blur(){
+    //source: https://www.script-tutorials.com/html5-canvas-image-effects-app-adding-blur/
+    for(let i=0; i < this.imageData.data.length; i+=4){
 
+      //width of every row of data
+      let drw = this.width * 4;
+
+      //sum of RGBA values
+      let sumR = 0;
+      let sumG = 0;
+      let sumB = 0;
+      let sumA = 0;
+
+      //count of elements
+      let c = 0;
+
+      //index in imageData.data of surrounding pixels
+      let sp = [
+        //top pixels
+        i - drw - 4, i - drw, i - drw + 4,
+        //middle pixels
+        i - 4, i + 4,
+        //bottom pixels
+        i + drw - 4, i + drw, i + drw + 4
+      ];
+
+      //get sum of every value from sp
+      for (let j = 0; j < sp.length; j++) {
+        //check if pixel exists
+        if ((sp[j] >= 0) && (sp[j] <= this.imageData.data.length - 3)) {
+          sumA += this.imageData.data[sp[j]];
+          sumR += this.imageData.data[sp[j] + 1];
+          sumG += this.imageData.data[sp[j] + 2];
+          sumB += this.imageData.data[sp[j] + 3];
+          c++;
+        }
+      }
+
+      //apply average value to imageData
+      this.imageData.data[i] = (sumA / c);
+      this.imageData.data[i+1] = (sumR / c);
+      this.imageData.data[i+2] = (sumG / c);
+      this.imageData.data[i+3] = (sumB / c);
+
+      //only to check if code is still running
+      console.log(1);
+    }
+    context.putImageData(this.imageData, this.x, this.y);
   }
 }
 
@@ -447,13 +499,13 @@ function fitImage(image) {
 
   if (imageAspectRatio < canvasAspectRatio) {
     values.imageHeight = canvas.height;
-    values.imageWidth = image.width * (values.imageHeight / image.height);
+    values.imageWidth = Math.round(image.width * (values.imageHeight / image.height));
     values.x = (canvas.width - values.imageWidth) / 2;
     values.y = 0;
   }
   else if (imageAspectRatio > canvasAspectRatio) {
     values.imageWidth = canvas.width;
-    values.imageHeight = image.height * (values.imageWidth / image.width);
+    values.imageHeight = Math.round(image.height * (values.imageWidth / image.width));
     values.y = (canvas.height - values.imageHeight) / 2;
     values.x = 0;
   }
