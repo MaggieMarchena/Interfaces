@@ -66,7 +66,7 @@ class Pencil {
   }
 
   draw(e) {
-    context.lineWidth = 10;
+    context.lineWidth = 5;
     context.strokeStyle = color.get();
     context.lineCap = "round";
     mouse.set(e.layerX, e.layerY);
@@ -99,6 +99,7 @@ class Eraser {
 
   erase(e) {
     context.lineWidth = 50;
+    context.lineCap="square";
     context.strokeStyle = WHITE;
     mouse.set(e.layerX, e.layerY);
     context.beginPath();
@@ -403,6 +404,11 @@ let filter = new Filter();
 let pencil = new Pencil();
 let eraser = new Eraser();
 let mouse = new Mouse();
+let originalImage = {};
+let x = 0;
+let y = 0;
+let width = 0;
+let height = 0;
 
 $(document).ready( function() {
 
@@ -446,13 +452,24 @@ $(document).ready( function() {
     reader.onload = function(event) {
       let img = new Image();
       img.onload = function() {
+        originalImage = img;
         let values = fitImage(img);
+        width = values.imageWidth;
+        height = values.imageHeight;
+        x = values.x;
+        y = values.y;
         context.drawImage(img, values.x, values.y, values.imageWidth, values.imageHeight);
         filter.setImageData(values.x, values.y, values.imageWidth, values.imageHeight);
       };
       img.src = event.target.result;
     };
     reader.readAsDataURL(e.target.files[0]);
+  });
+
+  $("#reset").on('click', function (e) {
+    e.preventDefault();
+    context.drawImage(originalImage, x, y, width, height);
+    filter.setImageData(x, y, width, height);
   });
 
   $("#start").on('click', loadCanvas());
@@ -466,6 +483,7 @@ $(document).ready( function() {
     eraser.setState('notActive');
     pencil.setState('active');
     $(this).addClass('active');
+    canvas.style.cursor = "crosshair";
   });
 
   $("#eraser").on('click', function() {
@@ -473,6 +491,7 @@ $(document).ready( function() {
     pencil.setState('notActive');
     eraser.setState('active');
     $(this).addClass('active');
+    canvas.style.cursor = 'crosshair';
   });
 
   $('.colors').on('click', function() {
