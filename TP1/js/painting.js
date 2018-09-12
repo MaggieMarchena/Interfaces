@@ -1,8 +1,10 @@
 /*jshint esversion: 6 */
 
+//global constants
 const WHITE = 'rgba(255, 255, 255, 255)';
 const FULL = 255;
 
+//classes
 class Mouse {
   constructor() {
     this.click = false;
@@ -285,6 +287,7 @@ class Filter {
         H  = Math.abs(H);
       }
 
+      //add saturation %
       S += 0.5 * S;
 
       //convert back to RGB
@@ -396,20 +399,30 @@ class Filter {
   }
 }
 
+//global variables
+
+//canvas
 let canvas = document.getElementById("canvas");
 let context = canvas.getContext("2d");
 
+//function objects
 let color = new Color();
 let filter = new Filter();
 let pencil = new Pencil();
 let eraser = new Eraser();
 let mouse = new Mouse();
+
+//image data for reset function
 let originalImage = {};
 let x = 0;
 let y = 0;
 let width = 0;
 let height = 0;
 
+
+//functions
+
+//loading and listener assignment
 $(document).ready( function() {
 
   function loadCanvas() {
@@ -506,7 +519,9 @@ $(document).ready( function() {
   });
 });
 
+//adapting image to canvas
 function fitImage(image) {
+  //source: https://sdqali.in/blog/2013/10/03/fitting-an-image-in-to-a-canvas-object/
   let imageAspectRatio = image.width / image.height;
   let canvasAspectRatio = canvas.width / canvas.height;
   let values = {
@@ -538,12 +553,14 @@ function fitImage(image) {
   return values;
 }
 
+//saving
 function saveImage() {
   let link = document.getElementById('save');
   link.setAttribute('href', canvas.toDataURL());
   link.setAttribute('download', 'image.png');
 }
 
+//blur filter tests
 function testRGB(tColor, t1, t2) {
   let color = 0;
   if ((6 * tColor) < 1) {
