@@ -342,8 +342,6 @@ class Filter {
       this.imageData.data[i+2] = Math.round(newB * FULL);
       this.imageData.data[i+3] = FULL;
 
-      //only to check if code is still running
-      console.log(1);
     }
     context.putImageData(this.imageData, this.x, this.y);
   }
@@ -392,8 +390,6 @@ class Filter {
       this.imageData.data[i+2] = (sumG / c);
       this.imageData.data[i+3] = (sumB / c);
 
-      //only to check if code is still running
-      console.log(1);
     }
     context.putImageData(this.imageData, this.x, this.y);
   }
@@ -487,9 +483,7 @@ $(document).ready( function() {
 
   $("#start").on('click', loadCanvas());
 
-  $("#save").on('click', function() {
-    saveImage();
-  });
+  $("#save").on('click', saveImage());
 
   $("#pencil").on('click', function() {
     $('.tools').removeClass('active');
@@ -515,6 +509,11 @@ $(document).ready( function() {
 
   $('.filters').on('click', function(e) {
     e.preventDefault();
+    let loading = new Image();
+    loading.src = "images/loading.gif";
+    loading.onLoad = function () {
+      context.drawImage(loading, x, y, width, height);
+    };
     filter.transform(this.name);
   });
 });
