@@ -7,6 +7,7 @@ const CHIPS = 21;
 const PLAYERS = 2;
 const YELLOW = 'yellow';
 const RED = 'red';
+const BLACK = 'rgba(0, 0, 0, 255)';
 const CHIP_SIDE_WIDTH = 100;
 const CHIP_SIDE_HEIGHT = 12;
 
@@ -61,10 +62,10 @@ class Tile {
     this.player = player;
     let img = new Image();
     if (player.getColor() == 'yellow'){
-      img.src = "./images/chipYellow.png";
+      img.src = "./images/backYellow.png";
     }
     else {
-      img.src = "./images/chipRed.png";
+      img.src = "./images/backRed.png";
     }
     let x = this.tileX + (tileWidth / 2);
     let y = this.tileY + (tileHeight / 2);
@@ -74,6 +75,13 @@ class Tile {
       context.beginPath();
       context.arc(x, y, RADIUS, 0, (Math.PI * 2));
       context.fill();
+      context.closePath();
+      context.beginPath();
+      context.arc(x, y, RADIUS, 0, (Math.PI * 2));
+      context.lineWidth = 2;
+      context.lineCap = 'round';
+      context.strokeStyle = BLACK;
+      context.stroke();
       context.closePath();
     };
   }
