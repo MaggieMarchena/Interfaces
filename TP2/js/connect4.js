@@ -4,15 +4,52 @@ const MAXCOL = 7;
 const MAXROW = 6;
 const RADIUS = 30;
 const CHIPS = 21;
+const PLAYERS = 2;
 const YELLOW = 'yellow';
 const RED = 'red';
+const CHIP_SIDE_WIDTH = 100;
+const CHIP_SIDE_HEIGHT = 12;
+
+class Mouse {
+  constructor() {
+    this.click = true;
+    this.lastX = null;
+    this.lastY = null;
+  }
+
+  clicked(){
+    return this.click;
+  }
+
+  setClick(state){
+    this.click = state;
+  }
+
+  set(x, y){
+    this.lastX = x;
+    this.lastY = y;
+  }
+
+  getLastX(){
+    return this.lastX;
+  }
+
+  getLastY(){
+    return this.lastY;
+  }
+
+  reset(){
+    this.lastX = null;
+    this.lastY = null;
+  }
+}
 
 class Tile {
   constructor(x, y) {
     this.filled = false;
     this.player = null;
-    this.x = x;
-    this.y = y;
+    this.tileX = x;
+    this.tileY = y;
   }
 
   isFilled(){
@@ -29,22 +66,16 @@ class Tile {
     else {
       img.src = "./images/chipRed.png";
     }
+    let x = this.tileX + (tileWidth / 2);
+    let y = this.tileY + (tileHeight / 2);
     img.onload = function () {
       let image = context.createPattern(this, 'repeat');
       context.fillStyle = image;
       context.beginPath();
-      context.arc(x + (tileWidth / 2), y - (tileHeight / 2), RADIUS, 0, (Math.PI * 2));
+      context.arc(x, y, RADIUS, 0, (Math.PI * 2));
       context.fill();
       context.closePath();
     };
-  }
-
-  getX(){
-    return this.x;
-  }
-
-  getY(){
-    return this.y;
   }
 }
 
@@ -62,6 +93,10 @@ class Board {
       auxX += tileWidth;
     }
   }
+
+  getTile(column, row){
+    return this.colums[column][row];
+  }
 }
 
 class Player {
@@ -73,6 +108,7 @@ class Player {
   useChip(){
     if (this.chips >0) {
       this.chips--;
+      //take one chip visual
     }
     else {
       //some sign saying no more chips
@@ -85,21 +121,68 @@ class Player {
 }
 
 class Game {
-  constructor(player1, player2) {
-    this.currentPlayer = player1;
-    this.waitingPlayer = player2;
+  constructor() {
+    this.currentPlayer = new Player(YELLOW);
+    this.waitingPlayer = new Player(RED);
+    this.board = new Board();
+    this.mouse = new Mouse();
   }
 
-  playTurn(){
-    //get the column
-    //search first free row from the bottom up
-    //tile.putChip(this.currentPlayer);
-    //this.currentPlayer.useChip();
+  playTurn(column){
+    let row = this.getEmptyRow(column);
+    let tile = this.board.getTile(column, row);
+    tile.putChip(this.currentPlayer);
+    this.currentPlayer.useChip();
     //check column, row and diagonals for 4 of currentPlayer color
     //lockChips(currentPlayer) - unlockChips(waitingPlayer)
-    //auxPlayer = currentPlayer
-    //this.currentPlayer = this.waitingPlayer
-    //this.waitingPlayer = aux
+    let auxPlayer = this.currentPlayer;
+    this.currentPlayer = this.waitingPlayer;
+    this.waitingPlayer = auxPlayer;
+  }
+
+  pickChip(){
+    this.mouse.setClick(true);
+    //drag and drop visual
+  }
+
+  dropChip(e){
+    this.mouse.setClick(false);
+    if ((e.layerX > boardX) && (e.layerX < boardX + boardWidth) && (e.layerY < boardY) && (e.layerY > 0)) {
+      this.mouse.set(e.layerX, e.layerY);
+      let column = this.getColumn();
+      if (this.columnNotFull(column)){
+        this.playTurn(column);
+      }
+    }
+  }
+
+  getColumn(){
+    let column = 0;
+    for (let i = 0; i < MAXCOL; i++) {
+      if ((this.mouse.getLastX() > boardX + (i * tileWidth)) && (this.mouse.getLastX() < boardX + ((i+1) * tileWidth))) {
+        column = i;
+      }
+    }
+    return column;
+  }
+
+  columnNotFull(column){
+    for (let i = 0; i < MAXROW; i++) {
+      if (!this.board.getTile(column, i).isFilled()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  getEmptyRow(column){
+    let row = MAXROW - 1;
+    while (row >= 0) {
+      if (!this.board.getTile(column, row).isFilled()) {
+        return row;
+      }
+      row--;
+    }
   }
 }
 
@@ -109,8 +192,13 @@ let context = canvas.getContext("2d");
 let boardX = 0;
 let boardY = 0;
 
+let boardWidth = 0;
+let boardHeight = 0;
+
 let tileWidth = 0;
 let tileHeight = 0;
+
+let game = null;
 
 $(document).ready( function() {
 
@@ -123,12 +211,52 @@ $(document).ready( function() {
     let board = new Image();
     board.src = "./images/board.png";
     board.onload = function() {
-      boardX = (canvas.width / 2) - (board.width / 2);
-      boardY = (canvas.height / 2) - (board.height / 2) + 20;
-      tileWidth = Math.round(board.width / 7);
-      tileHeight = board.height / 6;
-      context.drawImage(board, boardX, boardY, board.width, board.height);
+      boardWidth = board.width;
+      boardHeight = board.height;
+      boardX = (canvas.width / 2) - (boardWidth / 2);
+      boardY = (canvas.height / 2) - (boardHeight / 2) + 20;
+      tileWidth = Math.round(boardWidth / 7);
+      tileHeight = boardHeight / 6;
+      context.drawImage(board, boardX, boardY, boardWidth, boardHeight);
+      loadChips();
+      game = new Game();
     };
+  });
+
+  function loadChips() {
+    let yellowX = (boardX / 2) - (CHIP_SIDE_WIDTH / 2);
+    let yellowY = canvas.height - (CHIP_SIDE_HEIGHT * 2);
+    let chipSideYellow = new Image();
+    chipSideYellow.src = "./images/chipSideYellow.png";
+    chipSideYellow.onload = function () {
+      context.drawImage(chipSideYellow, yellowX, yellowY, chipSideYellow.width, chipSideYellow.height);
+      for (let i = 0; i < CHIPS; i++) {
+        context.drawImage(chipSideYellow, yellowX, yellowY, chipSideYellow.width, chipSideYellow.height);
+        yellowY -= CHIP_SIDE_HEIGHT;
+      }
+    };
+    let redX = boardX + boardWidth + yellowX;
+    let redY = canvas.height - (CHIP_SIDE_HEIGHT * 2);
+    let chipSideRed = new Image();
+    chipSideRed.src = "./images/chipSideRed.png";
+    chipSideRed.onload = function () {
+      for (let i = 0; i < CHIPS; i++) {
+        context.drawImage(chipSideRed, redX, redY, chipSideRed.width, chipSideRed.height);
+        redY -= CHIP_SIDE_HEIGHT;
+      }
+    };
+  }
+
+  canvas.addEventListener('mousedown', function(){
+    if (game != null) {
+      game.pickChip();
+    }
+  });
+
+  canvas.addEventListener('mouseup', function(e) {
+    if (game != null) {
+      game.dropChip(e);
+    }
   });
 
 });
