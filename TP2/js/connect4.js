@@ -2,6 +2,7 @@
 
 const MAXCOL = 7;
 const MAXROW = 6;
+const LINE = 4;
 const RADIUS = 30;
 const CHIPS = 21;
 const PLAYERS = 2;
@@ -61,7 +62,7 @@ class Tile {
     this.filled = true;
     this.player = player;
     let img = new Image();
-    if (player.getColor() == 'yellow'){
+    if (player.getColor() == YELLOW){
       img.src = "./images/backYellow.png";
     }
     else {
@@ -84,6 +85,10 @@ class Tile {
       context.stroke();
       context.closePath();
     };
+  }
+
+  getPlayer(){
+    return this.player;
   }
 }
 
@@ -132,8 +137,10 @@ class Game {
   constructor() {
     this.currentPlayer = new Player(YELLOW);
     this.waitingPlayer = new Player(RED);
+    this.winner = null;
     this.board = new Board();
     this.mouse = new Mouse();
+    this.counter = 0;
   }
 
   playTurn(column){
@@ -141,7 +148,14 @@ class Game {
     let tile = this.board.getTile(column, row);
     tile.putChip(this.currentPlayer);
     this.currentPlayer.useChip();
-    //check column, row and diagonals for 4 of currentPlayer color
+    this.counter++;
+    if (this.counter > 6) {
+      if (this.checkColumn(column) || this.checkRow(row) || this.checkDiagonals(column, row)) {
+        this.winner = this.currentPlayer;
+        alert('Winner: ' + this.winner.getColor());
+        //lockAll
+      }
+    }
     //lockChips(currentPlayer) - unlockChips(waitingPlayer)
     let auxPlayer = this.currentPlayer;
     this.currentPlayer = this.waitingPlayer;
@@ -192,6 +206,114 @@ class Game {
       row--;
     }
   }
+
+  checkColumn(column){
+    let counter = 0;
+    let row = 0;
+    while (counter < LINE && row < MAXROW) {
+      let tile = this.board.getTile(column, row);
+      if (tile.getPlayer() == this.currentPlayer) {
+        counter++;
+        if (counter == LINE) {
+          return true;
+        }
+      }
+      else {
+        counter = 0;
+      }
+      row++;
+    }
+    return false;
+  }
+
+  checkRow(row){
+    let counter = 0;
+    let column = 0;
+    while (counter < LINE && column < MAXCOL) {
+      let tile = this.board.getTile(column, row);
+      if (tile.getPlayer() == this.currentPlayer) {
+        counter++;
+        if (counter == LINE) {
+          return true;
+        }
+      }
+      else {
+        counter = 0;
+      }
+      column++;
+    }
+    return false;
+  }
+
+  checkDiagonals(column, row){
+    if (this.checkDiagonal1(column, row) || this.checkDiagonal2(column, row)) {
+      return true;
+    }
+    return false;
+  }
+
+  checkDiagonal1(column, row){
+    let counter = 0;
+
+    let baseCol = column;
+    let baseRow = row;
+    while ((baseCol > 0) && (baseRow > 0)) {
+      baseCol--;
+      baseRow--;
+    }
+    while ((counter < LINE) && (baseCol < MAXCOL-1) && (baseRow < MAXROW-1)) {
+      let tile = this.board.getTile(baseCol, baseRow);
+      if (tile.isFilled()) {
+        if (tile.getPlayer() == this.currentPlayer) {
+          counter++;
+          if (counter == LINE) {
+            return true;
+          }
+        }
+        else {
+          counter = 0;
+        }
+      }
+      else {
+        return false;
+      }
+      baseCol++;
+      baseRow++;
+    }
+    return false;
+  }
+
+  checkDiagonal2(column, row){
+    let counter = 0;
+
+    let baseCol = column;
+    let baseRow = row;
+    while ((baseCol > 0) && (baseRow < MAXROW-1)) {
+      baseCol--;
+      baseRow++;
+    }
+    while ((counter < LINE) && (baseCol < MAXCOL-1) && (baseRow > 0)) {
+      let tile = this.board.getTile(baseCol, baseRow);
+      if (tile.isFilled()) {
+        if (tile.getPlayer() == this.currentPlayer) {
+          counter++;
+          console.log(counter);
+          if (counter == LINE) {
+            return true;
+          }
+        }
+        else {
+          counter = 0;
+        }
+      }
+      else {
+        return false;
+      }
+      baseCol++;
+      baseRow--;
+    }
+    return false;
+  }
 }
 
 let canvas = document.getElementById("canvas");
@@ -216,6 +338,7 @@ $(document).ready( function() {
 
   $("#new").on('click', function (e) {
     e.preventDefault();
+    context.clearRect(0, 0, canvas.width, canvas.height);
     let board = new Image();
     board.src = "./images/board.png";
     board.onload = function() {
