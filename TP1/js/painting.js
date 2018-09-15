@@ -483,7 +483,10 @@ $(document).ready( function() {
 
   $("#start").on('click', loadCanvas());
 
-  $("#save").on('click', saveImage());
+  $("#save").on('click', function(){
+    saveImage();
+  });
+
 
   $("#pencil").on('click', function() {
     $('.tools').removeClass('active');
@@ -509,11 +512,11 @@ $(document).ready( function() {
 
   $('.filters').on('click', function(e) {
     e.preventDefault();
-    let loading = new Image();
-    loading.src = "images/loading.gif";
-    loading.onLoad = function () {
-      context.drawImage(loading, x, y, width, height);
-    };
+    // let loading = new Image();
+    // loading.src = "images/loading.gif";
+    // loading.onLoad = function () {
+    //   context.drawImage(loading, x, y, width, height);
+    // };
     filter.transform(this.name);
   });
 });
@@ -555,7 +558,7 @@ function fitImage(image) {
 //saving
 function saveImage() {
   let link = document.getElementById('save');
-  link.setAttribute('href', canvas.toDataURL());
+  link.setAttribute('href', canvas.toDataURL("image/png"));
   link.setAttribute('download', 'image.png');
 }
 
