@@ -100,8 +100,14 @@ body {
   margin: 0;
   padding: 0;
 }
-.canvas {
-  background-color: black;
+#canvas {
+  background-image: url("../images/back.png");
+}
+.grabbing {
+  cursor: pointer;
+}
+.blocked {
+  cursor: no-drop;
 }
 
 
