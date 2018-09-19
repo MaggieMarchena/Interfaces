@@ -9,7 +9,6 @@ const PLAYERS = 2;
 const YELLOW = 'yellow';
 const RED = 'red';
 const BLACK = 'rgba(0, 0, 0, 255)';
-const TRANSPARENT = 'rgba(0, 0, 0, 0)';
 const CHIP_SIDE_WIDTH = 100;
 const CHIP_SIDE_HEIGHT = 12;
 
@@ -135,12 +134,22 @@ class Player {
   constructor(color) {
     this.color = color;
     this.chips = CHIPS;
+    this.chipX = 0;
+    if (color == YELLOW) {
+      this.chipX = chipYellowX;
+    }
+    else {
+      this.chipX = chipRedX;
+    }
+    this.chipY = chipTopY;
   }
 
   useChip(){
     if (this.chips >0) {
       this.chips--;
-      //erase one chip visual
+      context.fillStyle = BLACK;
+      context.fillRect(this.chipX, this.chipY, CHIP_SIDE_WIDTH, CHIP_SIDE_HEIGHT);
+      this.chipY += CHIP_SIDE_HEIGHT;
     }
     else {
       //some sign saying no more chips
@@ -195,8 +204,8 @@ class Game {
 
     let limitTop = 0;
     let limitBottom;
-    if ((currentX > 0) && (currentX < boardX)) {
-      limitBottom = boardY + tileHeight*2;
+    if (((currentX > 0) && (currentX < boardX)) || (((currentX > boardX + boardWidth) && (currentX < canvas.width)))) {
+      limitBottom = boardY + tileHeight;
     }
     else {
       limitBottom = boardY;
@@ -216,13 +225,11 @@ class Game {
       img = red;
     }
 
-    if (lastX != null && lastY != null) {
-      context.clearRect((lastX - RADIUS - 5), (lastY - RADIUS - 5), (RADIUS*2 + 20), (RADIUS*2 + 20));
-    }
-
     if ((currentX > limitLeft) && (currentX < limitRight) && (currentY > limitTop) && (currentY < limitBottom)) {
-      canvas.classList.remove("blocked");
-      canvas.classList.add("grabbing");
+      if (lastX != null && lastY != null) {
+        context.clearRect((lastX - (RADIUS+5)), (lastY - (RADIUS+5)), (RADIUS*2 + 20), (RADIUS*2 + 20));
+      }
+
       let image = context.createPattern(img, 'no-repeat');
       context.fillStyle = image;
       context.beginPath();
@@ -231,8 +238,7 @@ class Game {
       context.closePath();
     }
     else {
-      canvas.classList.remove("grabbing");
-      canvas.classList.add("blocked");
+      canvas.style.cursor = 'url("images/blocked.png") 0 0,default';
     }
   }
 
@@ -241,7 +247,7 @@ class Game {
     let lastY = this.mouse.getLastY();
     canvas.classList.remove("blocked");
     canvas.classList.remove("grabbing");
-    context.clearRect((lastX - RADIUS - 5), (lastY - RADIUS - 5), (RADIUS*2 + 20), (RADIUS*2 + 20));
+    context.clearRect((lastX - (RADIUS+5)), (lastY - (RADIUS+5)), (RADIUS*2 + 20), (RADIUS*2 + 20));
     canvas.style.cursor = "default";
     if ((this.mouse.getLastX() > boardX) && (this.mouse.getLastX() < boardX + boardWidth) && (this.mouse.getLastY() < boardY) && (this.mouse.getLastY() > 0)) {
       let column = this.getColumn();
@@ -392,7 +398,7 @@ let canvas = document.getElementById("canvas");
 let context = canvas.getContext("2d");
 
 let yellow = new Image();
-yellow.src = "./images/backYellow.png";
+yellow.src = "images/backYellow.png";
 let red = new Image();
 red.src = "./images/backRed.png";
 
@@ -404,6 +410,11 @@ let boardHeight = 402;
 
 let tileWidth = 0;
 let tileHeight = 0;
+
+let chipYellowX = 0;
+let chipRedX = 0;
+let chipBottomY = 0;
+let chipTopY = 0;
 
 let game = null;
 
@@ -420,6 +431,10 @@ $(document).ready( function() {
     boardY = (canvas.height / 2) - (boardHeight / 2) + 20;
     tileWidth = Math.round(boardWidth / 7);
     tileHeight = boardHeight / 6;
+    chipYellowX = (boardX/2) - (CHIP_SIDE_WIDTH/2);
+    chipRedX = (boardX + boardWidth) + chipYellowX;
+    chipBottomY = canvas.height - CHIP_SIDE_HEIGHT;
+    chipTopY = chipBottomY - (CHIPS*CHIP_SIDE_HEIGHT);
     game = new Game();
   });
 

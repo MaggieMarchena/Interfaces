@@ -103,12 +103,6 @@ body {
 #canvas {
   background-image: url("../images/back.png");
 }
-.grabbing {
-  cursor: pointer;
-}
-.blocked {
-  cursor: no-drop;
-}
 
 
 /*
