@@ -191,10 +191,10 @@ class Game {
     let auxPlayer = this.currentPlayer;
     this.currentPlayer = this.waitingPlayer;
     this.waitingPlayer = auxPlayer;
+    this.mouse.resetLast();
   }
 
   pickChip(e){
-    this.mouse.update();
     this.mouse.set(e.layerX, e.layerY);
 
     let currentX = this.mouse.getCurrentX();
@@ -240,13 +240,13 @@ class Game {
     else {
       canvas.style.cursor = 'url("images/blocked.png") 0 0,default';
     }
+
+    this.mouse.update();
   }
 
   dropChip(e){
     let lastX = this.mouse.getLastX();
     let lastY = this.mouse.getLastY();
-    canvas.classList.remove("blocked");
-    canvas.classList.remove("grabbing");
     context.clearRect((lastX - (RADIUS+5)), (lastY - (RADIUS+5)), (RADIUS*2 + 20), (RADIUS*2 + 20));
     canvas.style.cursor = "default";
     if ((this.mouse.getLastX() > boardX) && (this.mouse.getLastX() < boardX + boardWidth) && (this.mouse.getLastY() < boardY) && (this.mouse.getLastY() > 0)) {
