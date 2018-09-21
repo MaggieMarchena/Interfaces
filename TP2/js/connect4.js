@@ -157,7 +157,8 @@ class Player {
       this.chipY += CHIP_SIDE_HEIGHT;
     }
     else {
-      //some sign saying no more chips
+      alert('No more chips, start a new game!');
+      endGame();
     }
   }
 
@@ -184,6 +185,10 @@ class Game {
     return this.currentPlayer;
   }
 
+  getWinner(){
+    return this.winner;
+  }
+
   playTurn(column){
     let row = this.getEmptyRow(column);
     let tile = this.board.getTile(column, row);
@@ -193,16 +198,30 @@ class Game {
     if (this.counter > 6) {
       if (this.checkColumn(column) || this.checkRow(row) || this.checkDiagonals(column, row)) {
         this.winner = this.currentPlayer;
-        alert('Winner: ' + this.winner.getColor());
-        //lockAll
       }
     }
-    let auxPlayer = this.currentPlayer;
-    this.currentPlayer = this.waitingPlayer;
-    this.waitingPlayer = auxPlayer;
-    this.mouse.resetLast();
-    this.mouse.setDragActive(false);
-    this.showChip();
+    if (this.winner == null) {
+      let auxPlayer = this.currentPlayer;
+      this.currentPlayer = this.waitingPlayer;
+      this.waitingPlayer = auxPlayer;
+      this.mouse.resetLast();
+      this.mouse.setDragActive(false);
+      this.showChip();
+    }
+    else {
+      let winner = null;
+      if (this.winner.getColor() == YELLOW) {
+        winner = winnerYellow;
+      }
+      else {
+        winner = winnerRed;
+      }
+      setTimeout(function() {
+        winner.classList.remove("hidden");
+        winner.classList.add("visible");
+      }, 500);
+      endGame();
+    }
   }
 
   showChip(){
@@ -254,7 +273,7 @@ class Game {
 
     if ((currentX > limitLeft) && (currentX < limitRight) && (currentY > limitTop) && (currentY < limitBottom)) {
       if (lastX != null && lastY != null) {
-        context.clearRect((lastX - RADIUS - 5), (lastY - RADIUS - 5), CHIP_SIZE + 10, CHIP_SIZE + 10);
+        context.clearRect((lastX - RADIUS - 5), (lastY - RADIUS - 5), CHIP_SIZE + 20, CHIP_SIZE + 20);
       }
 
       context.drawImage(img, currentX - RADIUS, currentY - RADIUS, CHIP_SIZE, CHIP_SIZE);
@@ -269,7 +288,7 @@ class Game {
   dropChip(e){
     let lastX = this.mouse.getLastX();
     let lastY = this.mouse.getLastY();
-    context.clearRect((lastX - RADIUS - 5), (lastY - RADIUS - 5), CHIP_SIZE + 10, CHIP_SIZE + 10);
+    context.clearRect((lastX - RADIUS - 5), (lastY - RADIUS - 5), CHIP_SIZE + 20, CHIP_SIZE + 20);
     canvas.style.cursor = "default";
     if ((this.mouse.getLastX() > boardX) && (this.mouse.getLastX() < boardX + boardWidth) && (this.mouse.getLastY() < boardY) && (this.mouse.getLastY() > 0)) {
       let column = this.getColumn();
@@ -422,6 +441,9 @@ class Game {
 let canvas = document.getElementById("canvas");
 let context = canvas.getContext("2d");
 
+let winnerYellow = document.getElementById('winner1');
+let winnerRed = document.getElementById('winner2');
+
 let yellow = new Image();
 yellow.src = "images/chipYellow.png";
 let red = new Image();
@@ -450,44 +472,21 @@ $(document).ready( function() {
 
   loadGame();
 
+  addEventListeners();
+
   $("#new").on('click', function(e) {
     e.preventDefault();
     context.clearRect(0, 0, canvas.width, canvas.height);
-    game = new Game();
-    game.showChip();
-  });
-
-  canvas.addEventListener('mousedown', function(e){
-    game.getMouse().setClick(true);
-    if (game.getCurrentPlayer().getColor() == YELLOW && isClickOnChip(e.layerX, e.layerY, centerChipYellowX, centerChipY)) {
-      game.getMouse().setDragActive(true);
-    }
-    else if (game.getCurrentPlayer().getColor() == RED && isClickOnChip(e.layerX, e.layerY, centerChipRedX, centerChipY)) {
-      game.getMouse().setDragActive(true);
-    }
-    else {
-      game.getMouse().setDragActive(false);
-    }
-  });
-
-  canvas.addEventListener('mousemove', function(e) {
-    if (game != null) {
-      if (game.getMouse().clicked() && game.getMouse().isDragActive()) {
-        game.pickChip(e);
-      }
-    }
-  });
-
-  canvas.addEventListener('mouseup', function(e) {
-    game.getMouse().setClick(false);
-    if (game != null) {
-      game.dropChip();
-    }
+    loadGame();
   });
 
 });
 
 function loadGame() {
+  winner1.classList.remove("visible");
+  winner2.classList.remove("visible");
+  winner1.classList.add("hidden");
+  winner2.classList.add("hidden");
   boardX = (canvas.width / 2) - (boardWidth / 2);
   boardY = (canvas.height / 2) - (boardHeight / 2) + 20;
   tileWidth = Math.round(boardWidth / 7);
@@ -506,7 +505,55 @@ function loadGame() {
   };
 }
 
+function addEventListeners() {
+  canvas.addEventListener('mousedown', function(e){
+    mouseDown(e);
+  });
+
+  canvas.addEventListener('mousemove', function(e) {
+    mouseMove(e);
+  });
+
+  canvas.addEventListener('mouseup', function(e) {
+    mouseUp();
+  });
+}
+
+function mouseDown(e) {
+  if (game != null) {
+    game.getMouse().setClick(true);
+    if (game.getCurrentPlayer().getColor() == YELLOW && isClickOnChip(e.layerX, e.layerY, centerChipYellowX, centerChipY)) {
+      game.getMouse().setDragActive(true);
+    }
+    else if (game.getCurrentPlayer().getColor() == RED && isClickOnChip(e.layerX, e.layerY, centerChipRedX, centerChipY)) {
+      game.getMouse().setDragActive(true);
+    }
+    else {
+      game.getMouse().setDragActive(false);
+    }
+  }
+}
+
+function mouseMove(e) {
+  if (game != null) {
+    if (game.getMouse().clicked() && game.getMouse().isDragActive()) {
+      game.pickChip(e);
+    }
+  }
+}
+
+function mouseUp() {
+  if (game != null) {
+    game.getMouse().setClick(false);
+    game.dropChip();
+  }
+}
+
 function isClickOnChip(x0, y0, x1, y1) {
   let distance = Math.sqrt((x1 - x0)*(x1 - x0) + (y1 - y0)*(y1-y0));
   return (distance < RADIUS);
+}
+
+function endGame() {
+  game = null;
 }
