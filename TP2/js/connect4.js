@@ -11,6 +11,7 @@ const RED = 'red';
 const BLACK = 'rgba(0, 0, 0, 255)';
 const CHIP_SIDE_WIDTH = 100;
 const CHIP_SIDE_HEIGHT = 12;
+const CHIP_SIZE = 60;
 
 class Mouse {
   constructor() {
@@ -19,6 +20,7 @@ class Mouse {
     this.currentY = null;
     this.lastX = null;
     this.lastY = null;
+    this.dragActive = false;
   }
 
   clicked(){
@@ -27,6 +29,10 @@ class Mouse {
 
   setClick(state){
     this.click = state;
+  }
+
+  setDragActive(state){
+    this.dragActive = state;
   }
 
   set(x, y){
@@ -88,17 +94,12 @@ class Tile {
     else {
       img = red;
     }
-    let x = this.tileX + (tileWidth / 2);
-    let y = this.tileY + (tileHeight / 2);
-    let image = context.createPattern(img, 'repeat');
-    context.fillStyle = image;
+    let x = (this.tileX + (tileWidth / 2)) - RADIUS;
+    let y = (this.tileY + (tileHeight / 2)) - RADIUS;
+    context.drawImage(img, x, y, CHIP_SIZE, CHIP_SIZE);
     context.beginPath();
-    context.arc(x, y, RADIUS, 0, (Math.PI * 2));
-    context.fill();
-    context.closePath();
-    context.beginPath();
-    context.arc(x, y, RADIUS, 0, (Math.PI * 2));
-    context.lineWidth = 2;
+    context.arc((x + RADIUS), (y + RADIUS), RADIUS, 0, (Math.PI * 2));
+    context.lineWidth = 3;
     context.lineCap = 'round';
     context.strokeStyle = BLACK;
     context.stroke();
@@ -192,6 +193,23 @@ class Game {
     this.currentPlayer = this.waitingPlayer;
     this.waitingPlayer = auxPlayer;
     this.mouse.resetLast();
+    this.showChip();
+  }
+
+  showChip(){
+    let img;
+    let x = 0;
+    let y = (boardY + (tileHeight/2)) - RADIUS;
+    if (this.currentPlayer.getColor() == YELLOW) {
+      x = (boardX/2) - RADIUS;
+      img = yellow;
+    }
+    else {
+      x = (boardX + boardWidth + (boardX/2)) - RADIUS;
+      img = red;
+    }
+
+    context.drawImage(img, x, y, CHIP_SIZE, CHIP_SIZE);
   }
 
   pickChip(e){
@@ -227,15 +245,10 @@ class Game {
 
     if ((currentX > limitLeft) && (currentX < limitRight) && (currentY > limitTop) && (currentY < limitBottom)) {
       if (lastX != null && lastY != null) {
-        context.clearRect((lastX - (RADIUS+5)), (lastY - (RADIUS+5)), (RADIUS*2 + 20), (RADIUS*2 + 20));
+        context.clearRect((lastX - RADIUS - 5), (lastY - RADIUS - 5), CHIP_SIZE + 10, CHIP_SIZE + 10);
       }
 
-      let image = context.createPattern(img, 'no-repeat');
-      context.fillStyle = image;
-      context.beginPath();
-      context.arc(currentX, currentY, RADIUS, 0, (Math.PI * 2));
-      context.fill();
-      context.closePath();
+      context.drawImage(img, currentX - RADIUS, currentY - RADIUS, CHIP_SIZE, CHIP_SIZE);
     }
     else {
       canvas.style.cursor = 'url("images/blocked.png") 0 0,default';
@@ -247,13 +260,16 @@ class Game {
   dropChip(e){
     let lastX = this.mouse.getLastX();
     let lastY = this.mouse.getLastY();
-    context.clearRect((lastX - (RADIUS+5)), (lastY - (RADIUS+5)), (RADIUS*2 + 20), (RADIUS*2 + 20));
+    context.clearRect((lastX - RADIUS - 5), (lastY - RADIUS - 5), CHIP_SIZE + 10, CHIP_SIZE + 10);
     canvas.style.cursor = "default";
     if ((this.mouse.getLastX() > boardX) && (this.mouse.getLastX() < boardX + boardWidth) && (this.mouse.getLastY() < boardY) && (this.mouse.getLastY() > 0)) {
       let column = this.getColumn();
       if (this.columnNotFull(column)){
         this.playTurn(column);
       }
+    }
+    else {
+      this.showChip();
     }
   }
 
@@ -398,9 +414,9 @@ let canvas = document.getElementById("canvas");
 let context = canvas.getContext("2d");
 
 let yellow = new Image();
-yellow.src = "images/backYellow.png";
+yellow.src = "images/chipYellow.png";
 let red = new Image();
-red.src = "./images/backRed.png";
+red.src = "images/chipRed.png";
 
 let boardX = 0;
 let boardY = 0;
@@ -420,22 +436,13 @@ let game = null;
 
 $(document).ready( function() {
 
-  function hola() {
-    console.log('hola');
-  }
+  loadGame();
 
-  $("#new").on('click', function (e) {
+  $("#new").on('click', function(e) {
     e.preventDefault();
     context.clearRect(0, 0, canvas.width, canvas.height);
-    boardX = (canvas.width / 2) - (boardWidth / 2);
-    boardY = (canvas.height / 2) - (boardHeight / 2) + 20;
-    tileWidth = Math.round(boardWidth / 7);
-    tileHeight = boardHeight / 6;
-    chipYellowX = (boardX/2) - (CHIP_SIDE_WIDTH/2);
-    chipRedX = (boardX + boardWidth) + chipYellowX;
-    chipBottomY = canvas.height - CHIP_SIDE_HEIGHT;
-    chipTopY = chipBottomY - (CHIPS*CHIP_SIDE_HEIGHT);
     game = new Game();
+    game.showChip();
   });
 
   canvas.addEventListener('mousedown', function(e){
@@ -458,3 +465,19 @@ $(document).ready( function() {
   });
 
 });
+
+function loadGame() {
+  boardX = (canvas.width / 2) - (boardWidth / 2);
+  boardY = (canvas.height / 2) - (boardHeight / 2) + 20;
+  tileWidth = Math.round(boardWidth / 7);
+  tileHeight = boardHeight / 6;
+  chipYellowX = (boardX/2) - (CHIP_SIDE_WIDTH/2);
+  chipRedX = (boardX + boardWidth) + chipYellowX;
+  chipBottomY = canvas.height - CHIP_SIDE_HEIGHT;
+  chipTopY = chipBottomY - (CHIPS*CHIP_SIDE_HEIGHT);
+
+  game = new Game();
+  yellow.onload = function() {
+    game.showChip();
+  };
+}
