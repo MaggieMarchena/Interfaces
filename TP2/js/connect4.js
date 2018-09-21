@@ -40,6 +40,10 @@ class Mouse {
     this.currentY = y;
   }
 
+  isDragActive(){
+    return this.dragActive;
+  }
+
   getLastX(){
     return this.lastX;
   }
@@ -176,6 +180,10 @@ class Game {
     return this.mouse;
   }
 
+  getCurrentPlayer(){
+    return this.currentPlayer;
+  }
+
   playTurn(column){
     let row = this.getEmptyRow(column);
     let tile = this.board.getTile(column, row);
@@ -193,19 +201,20 @@ class Game {
     this.currentPlayer = this.waitingPlayer;
     this.waitingPlayer = auxPlayer;
     this.mouse.resetLast();
+    this.mouse.setDragActive(false);
     this.showChip();
   }
 
   showChip(){
     let img;
     let x = 0;
-    let y = (boardY + (tileHeight/2)) - RADIUS;
+    let y = centerChipY - RADIUS;
     if (this.currentPlayer.getColor() == YELLOW) {
-      x = (boardX/2) - RADIUS;
+      x = centerChipYellowX - RADIUS;
       img = yellow;
     }
     else {
-      x = (boardX + boardWidth + (boardX/2)) - RADIUS;
+      x = centerChipRedX - RADIUS;
       img = red;
     }
 
@@ -431,6 +440,9 @@ let chipYellowX = 0;
 let chipRedX = 0;
 let chipBottomY = 0;
 let chipTopY = 0;
+let centerChipY = 0;
+let centerChipYellowX = 0;
+let centerChipRedX = 0;
 
 let game = null;
 
@@ -447,11 +459,20 @@ $(document).ready( function() {
 
   canvas.addEventListener('mousedown', function(e){
     game.getMouse().setClick(true);
+    if (game.getCurrentPlayer().getColor() == YELLOW && isClickOnChip(e.layerX, e.layerY, centerChipYellowX, centerChipY)) {
+      game.getMouse().setDragActive(true);
+    }
+    else if (game.getCurrentPlayer().getColor() == RED && isClickOnChip(e.layerX, e.layerY, centerChipRedX, centerChipY)) {
+      game.getMouse().setDragActive(true);
+    }
+    else {
+      game.getMouse().setDragActive(false);
+    }
   });
 
   canvas.addEventListener('mousemove', function(e) {
     if (game != null) {
-      if (game.getMouse().clicked()) {
+      if (game.getMouse().clicked() && game.getMouse().isDragActive()) {
         game.pickChip(e);
       }
     }
@@ -475,9 +496,17 @@ function loadGame() {
   chipRedX = (boardX + boardWidth) + chipYellowX;
   chipBottomY = canvas.height - CHIP_SIDE_HEIGHT;
   chipTopY = chipBottomY - (CHIPS*CHIP_SIDE_HEIGHT);
+  centerChipY = (boardY + (tileHeight/2));
+  centerChipYellowX = boardX/2;
+  centerChipRedX = boardX + boardWidth + (boardX/2);
 
   game = new Game();
   yellow.onload = function() {
     game.showChip();
   };
+}
+
+function isClickOnChip(x0, y0, x1, y1) {
+  let distance = Math.sqrt((x1 - x0)*(x1 - x0) + (y1 - y0)*(y1-y0));
+  return (distance < RADIUS);
 }
