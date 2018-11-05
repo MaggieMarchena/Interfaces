@@ -1,0 +1,21 @@
+#game-container{
+  position: absolute;
+  height: 295px;
+  width: 590px;
+  top: 100px;
+  left: 384px;
+  z-index: 0;
+}
+
+.game-on{
+  background-image: url("../../images/forest-background.png");
+  animation: background-move 3s steps(60) infinite;
+}
+
+@keyframes background-move {
+   100% { background-position: 0px 590px; }
+}
+
+.game-end{
+  background-image: url("../../images/forest-background.png");
+}

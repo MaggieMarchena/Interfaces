@@ -1,0 +1,23 @@
+#snack1, #snack2, #snack3{
+  position: absolute;
+  height: 22px;
+  width: 36px;
+  top: 20px;
+  z-index: 1;
+}
+
+#snack1{
+  left: 205px;
+}
+
+#snack2{
+  left: 269px;
+}
+
+#snack3{
+  left: 333px;
+}
+
+.snack-move{
+  background-image: url("../../images/scooby-snack.png");
+}
