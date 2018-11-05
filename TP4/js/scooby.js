@@ -81,6 +81,7 @@ class Scooby {
     this.element.classList.add("scooby-faint");
     let element = this.element;
     setTimeout(function () {
+      element.classList.remove("scooby-walk");
       element.classList.remove("scooby-faint");
       element.classList.add("scooby-fainted");
     }, 750);

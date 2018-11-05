@@ -29,20 +29,25 @@ class Ghost {
   }
 
   move(){
-    this.container.classList.remove('pass');
-    this.container.classList.remove('collide');
-    this.container.classList.add('move');
+    this.element.classList.remove('pass');
+    this.element.classList.remove('collide');
+    this.element.classList.add('move');
   }
 
   pass(){
-    this.container.classList.remove('move');
-    this.container.classList.remove('collide');
-    this.container.classList.add('pass');
+    this.element.classList.remove('move');
+    this.element.classList.remove('collide');
+    this.element.classList.add('pass');
+    let element = this.element;
+    setTimeout(function() {
+      element.classList.remove("ghost1", "ghost2", "ghost3");
+      element.classList.remove('pass');
+    }, 500);
   }
 
   collide(){
-    this.container.classList.remove('move');
-    this.container.classList.remove('pass');
-    this.container.classList.add('collide');
+    this.element.classList.remove('move');
+    this.element.classList.remove('pass');
+    this.element.classList.add('collide');
   }
 }

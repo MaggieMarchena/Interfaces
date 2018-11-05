@@ -3,17 +3,32 @@
 class Game {
   constructor() {
     this.element = document.getElementById('game-container');
+    this.state = "end";
+    this.moveAllowed = false;
     this.scooby = new Scooby();
     this.ghost = new Ghost();
   }
 
   start(){
+    this.state = "on";
+    this.moveAllowed = true;
     this.scooby.start();
     this.element.classList.remove("game-end");
     this.element.classList.add("game-on");
+    this.play();
+  }
+
+  play(){
+    let g = this;
+    setInterval(function() {
+      if (g.state == "on") {
+        g.showGhost();
+      }
+    }, 3000);
   }
 
   end(){
+    this.state = "end";
     this.element.classList.remove("game-on");
     this.element.classList.add("game-end");
   }
@@ -22,13 +37,14 @@ class Game {
     return this.scooby.getLane();
   }
 
-  update(){
+  updateVisual(){
+    this.moveAllowed = true;
     if (this.scooby.getState() == "walking") {
       this.scoobyWalk();
     }
-    // else if (this.scooby.getState() == "") {
-    //
-    // }
+    else if (this.scooby.getState() == "fainting") {
+      this.scoobyFaint();
+    }
   }
 
   changeScoobyState(state){
@@ -42,49 +58,82 @@ class Game {
   scoobyJumpRight(){
     if ((game.getScoobyLane() == 1)) {
       this.scooby.jump1to2();
+      this.scooby.moveRight();
     }
     else if ((game.getScoobyLane() == 2)) {
       this.scooby.jump2to3();
+      this.scooby.moveRight();
     }
-    let scooby = this.scooby;
-    setTimeout(function () {
-      scooby.moveRight();
-    }, 800);
   }
 
   scoobyJumpLeft(){
     if ((game.getScoobyLane() == 2)) {
       this.scooby.jump2to1();
+      this.scooby.moveLeft();
     }
     else if ((game.getScoobyLane() == 3)) {
       this.scooby.jump3to2();
+      this.scooby.moveLeft();
     }
-    let scooby = this.scooby;
-    setTimeout(function () {
-      scooby.moveLeft();
-    }, 800);
   }
 
   scoobyFaint(){
     this.scooby.faint();
     this.end();
   }
+
+  showGhost() {
+    let num = getRandomNum();
+    this.ghost.setLane(num);
+    this.ghost.move();
+    let g = this;
+    setTimeout(function () {
+      g.checkCollision();
+    }, 2000);
+  }
+
+  checkCollision(){
+    if(this.scooby.getLane() == this.ghost.getLane()){
+      this.scooby.faint();
+      this.ghost.collide();
+      this.end();
+    }
+    else {
+      this.changeScoobyState("walking");
+      this.ghost.pass();
+    }
+  }
+
+  arrowRight(){
+    if (this.moveAllowed) {
+      this.scoobyJumpRight();
+      this.moveAllowed = false;
+      let g = this;
+      setTimeout(function () {
+        g.updateVisual();
+      }, 800);
+    }
+  }
+
+  arrowLeft(){
+    if (this.moveAllowed) {
+      this.scoobyJumpLeft();
+      this.moveAllowed = false;
+      let g = this;
+      setTimeout(function () {
+        g.updateVisual();
+      }, 800);
+    }
+  }
 }
 
 let game = null;
 
-//let gameContainer = document.getElementById('game-container');
-// let ghostContainer = document.getElementById('ghost');
-//
-// let gamePosLeft = gameContainer.offsetLeft;
-// let gamePosTop = gameContainer.offsetTop;
-
 $(document).ready( function() {
 
-  // ghosts = createGhosts();
   game = new Game();
-  game.start();
   addEventListeners();
+  game.start();
 
 });
 
@@ -99,49 +148,14 @@ function keyDown(e) {
 
   if (game != null){
     if (key == ARROW_RIGHT) {
-      game.scoobyJumpRight();
-      game.changeScoobyState("walking");
-      setTimeout(function () {
-        game.update();
-      }, 800);
+      game.arrowRight();
     }
     else if (key == ARROW_LEFT) {
-      game.scoobyJumpLeft();
-      game.changeScoobyState("walking");
-      setTimeout(function () {
-        game.update();
-      }, 800);
+      game.arrowLeft();
     }
   }
 }
 
-// function createGhosts() {
-//   let ghosts = [];
-//
-//   let ghost1 = new Ghost();
-//   ghost1.setLane(1);
-//
-//   let ghost2 = new Ghost();
-//   ghost2.setLane(2);
-//
-//   let ghost3 = new Ghost();
-//   ghost3.setLane(3);
-//
-//   ghosts[1] = ghost1;
-//   ghosts[2] = ghost2;
-//   ghosts[3] = ghost3;
-//
-//   return ghosts;
-// }
-
-// function showGhost(ghosts) {
-//   let num = getRandom();
-//   let ghost = ghosts[num];
-//   if (ghost.isAvailable()) {
-//     ghost.use();
-//   }
-// }
-
-function getRandom() {
+function getRandomNum() {
   return Math.floor(Math.random() * (4 - 1) + 1);
 }

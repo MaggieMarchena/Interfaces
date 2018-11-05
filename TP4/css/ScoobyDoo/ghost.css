@@ -19,25 +19,25 @@
 
 .move{
   background-image: url("../../images/ghost.gif");
-  animation: ghost-move 4s steps(148);
+  animation: ghost-move 2s steps(50);
 }
 
 @keyframes ghost-move {
   0% {top: 0px;}
-  100% {top: 180px;}
+  100% {top: 200px;}
 }
 
 .pass{
   background-image: url("../../images/ghost.gif");
-  animation: ghost-pass 1s steps(24);
+  animation: ghost-pass 2s steps(24);
 }
 
 @keyframes ghost-pass {
-  0% {top: 180px;}
-  100% {top: 265px;}
+  0% {top: 190px;}
+  100% {top: 400px;}
 }
 
 .collide{
-  top: 180px;
-  background-image: url("../../images/ghost.png");
+  top: 200px;
+  background-image: url("../../images/ghost.gif");
 }
