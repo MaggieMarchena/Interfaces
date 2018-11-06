@@ -7,6 +7,7 @@ class Game {
     this.moveAllowed = false;
     this.scooby = new Scooby();
     this.ghost = new Ghost();
+    this.snack = new Snack();
   }
 
   start(){
@@ -25,7 +26,23 @@ class Game {
         g.showGhost();
       }
     }, 3000);
+    setTimeout(function() {
+      setInterval(function() {
+        if (g.state == "on") {
+          g.showSnack();
+        }
+      }, 6000);
+    }, 2000);
   }
+
+  // playSnack(){
+  //   let g = this;
+  //   setInterval(function() {
+  //     if (g.state == "on") {
+  //       g.showSnack();
+  //     }
+  //   }, 6000);
+  // }
 
   end(){
     this.state = "end";
@@ -92,6 +109,20 @@ class Game {
     }, 2000);
   }
 
+  showSnack() {
+    let num = getRandomNum();
+    let ghostLane = this.ghost.getLane();
+    while (ghostLane == num) {
+      num = getRandomNum();
+    }
+    this.snack.setLane(num);
+    this.snack.move();
+    let g = this;
+    setTimeout(function () {
+      g.checkEat();
+    }, 2000);
+  }
+
   checkCollision(){
     if(this.scooby.getLane() == this.ghost.getLane()){
       this.scooby.faint();
@@ -101,6 +132,17 @@ class Game {
     else {
       this.changeScoobyState("walking");
       this.ghost.pass();
+    }
+  }
+
+  checkEat(){
+    if(this.scooby.getLane() == this.snack.getLane()){
+      this.snack.collide();
+      this.changeScoobyState("walking");
+    }
+    else {
+      this.changeScoobyState("walking");
+      this.snack.pass();
     }
   }
 

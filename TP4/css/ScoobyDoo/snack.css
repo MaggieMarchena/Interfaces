@@ -1,23 +1,42 @@
-#snack1, #snack2, #snack3{
+#snack{
   position: absolute;
   height: 22px;
   width: 36px;
-  top: 20px;
   z-index: 1;
 }
 
-#snack1{
-  left: 205px;
+.snack1{
+  left: 208px;
 }
 
-#snack2{
-  left: 269px;
+.snack2{
+  left: 272px;
 }
 
-#snack3{
-  left: 333px;
+.snack3{
+  left: 336px;
 }
 
-.snack-move{
+.snackmove{
   background-image: url("../../images/scooby-snack.png");
+  animation: ghost-move 2s steps(50);
+}
+
+@keyframes snack-move {
+  0% {top: 0px;}
+  100% {top: 200px;}
+}
+
+.snackpass{
+  background-image: url("../../images/scooby-snack.png");
+  animation: ghost-pass 2s steps(24);
+}
+
+@keyframes snack-pass {
+  0% {top: 190px;}
+  100% {top: 400px;}
+}
+
+.snackcollide{
+  display: none;
 }
