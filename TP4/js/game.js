@@ -1,48 +1,57 @@
 /*jshint esversion: 6 */
 
 class Game {
-  constructor() {
+  constructor(scoobyLaugh) {
     this.element = document.getElementById('game-container');
     this.state = "end";
     this.moveAllowed = false;
     this.scooby = new Scooby();
     this.ghost = new Ghost();
     this.snack = new Snack();
+    this.score = 0;
+    this.element.classList.add("game-idle");
+    this.scooby.idle();
+    this.ghostIntervalID = 0;
+    this.snackIntervalID = 0;
+    this.scoreElement = document.getElementById('score');
+    this.sound = scoobyLaugh;
+  }
+
+  getIntervals(){
+    return [this.ghostIntervalId, this.snackIntervalID];
   }
 
   start(){
-    this.state = "on";
     this.moveAllowed = true;
-    this.scooby.start();
+    this.score = 0;
     this.element.classList.remove("game-end");
+    this.element.classList.remove("game-idle");
     this.element.classList.add("game-on");
     this.play();
+    this.updateVisual();
   }
 
   play(){
+    this.state = "on";
+    this.moveAllowed = true;
+    this.scooby.start();
+    this.element.classList.remove("game-end", "game-idle");
+    this.element.classList.add("game-on");
     let g = this;
-    setInterval(function() {
+    this.ghostIntervalID = setInterval(function() {
       if (g.state == "on") {
         g.showGhost();
       }
     }, 3000);
+    let snackIntervalID = this.snackIntervalID;
     setTimeout(function() {
-      setInterval(function() {
+      snackIntervalID = setInterval(function() {
         if (g.state == "on") {
           g.showSnack();
         }
       }, 6000);
     }, 2000);
   }
-
-  // playSnack(){
-  //   let g = this;
-  //   setInterval(function() {
-  //     if (g.state == "on") {
-  //       g.showSnack();
-  //     }
-  //   }, 6000);
-  // }
 
   end(){
     this.state = "end";
@@ -58,6 +67,7 @@ class Game {
     this.moveAllowed = true;
     if (this.scooby.getState() == "walking") {
       this.scoobyWalk();
+      this.scoreElement.innerHTML = this.score;
     }
     else if (this.scooby.getState() == "fainting") {
       this.scoobyFaint();
@@ -94,6 +104,10 @@ class Game {
     }
   }
 
+  scoobyLaugh(){
+    this.sound.play();
+  }
+
   scoobyFaint(){
     this.scooby.faint();
     this.end();
@@ -124,24 +138,37 @@ class Game {
   }
 
   checkCollision(){
-    if(this.scooby.getLane() == this.ghost.getLane()){
-      this.scooby.faint();
-      this.ghost.collide();
-      this.end();
+    if (this.state == "on") {
+      if(this.scooby.getLane() == this.ghost.getLane()){
+        this.scooby.faint();
+        this.ghost.collide();
+        this.end();
+      }
+      else {
+        this.changeScoobyState("walking");
+        this.ghost.pass();
+      }
     }
     else {
-      this.changeScoobyState("walking");
       this.ghost.pass();
     }
   }
 
   checkEat(){
-    if(this.scooby.getLane() == this.snack.getLane()){
-      this.snack.collide();
-      this.changeScoobyState("walking");
+    if (this.state == "on") {
+      if(this.scooby.getLane() == this.snack.getLane()){
+        this.snack.collide();
+        this.changeScoobyState("walking");
+        this.scoobyLaugh();
+        this.score += 40;
+        this.updateVisual();
+      }
+      else {
+        this.changeScoobyState("walking");
+        this.snack.pass();
+      }
     }
     else {
-      this.changeScoobyState("walking");
       this.snack.pass();
     }
   }
@@ -171,17 +198,34 @@ class Game {
 
 let game = null;
 
+
 $(document).ready( function() {
 
-  game = new Game();
-  addEventListeners();
-  game.start();
+  let scoobyLaugh = document.createElement("audio");
+  scoobyLaugh.src = "sounds/scooby-laugh.wav";
+  scoobyLaugh.setAttribute("preload", "auto");
+  scoobyLaugh.setAttribute("controls", "none");
+  scoobyLaugh.style.display = "none";
+  document.body.appendChild(scoobyLaugh);
+
+  game = new Game(scoobyLaugh);
+  addEventListeners(scoobyLaugh);
 
 });
 
-function addEventListeners() {
+function addEventListeners(scoobyLaugh) {
   document.addEventListener('keydown', function(e){
     keyDown(e);
+  });
+
+  document.getElementById('new-game').addEventListener('click', function(){
+    game.end();
+    let intervals = game.getIntervals();
+    for (let i = 0; i < intervals.length; i++) {
+      window.clearInterval(intervals[i]);
+    }
+    game = new Game(scoobyLaugh);
+    game.start();
   });
 }
 

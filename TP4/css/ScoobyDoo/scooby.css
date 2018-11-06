@@ -6,6 +6,10 @@
   z-index: 1;
 }
 
+.scooby-idle{
+  background-image: url("../../images/scooby-walk.png");
+}
+
 .scooby-walk{
   background-image: url("../../images/scooby-walk.png");
   animation: scooby-walk 1s steps(8) infinite;

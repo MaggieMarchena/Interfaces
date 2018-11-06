@@ -21,3 +21,29 @@ body{
   background-image: url("../images/game-card.png");
   background-repeat: no-repeat;
 }
+
+#new-game{
+  position: absolute;
+  top: 260px;
+  left: 745px;
+  color: red;
+  opacity: 0;
+}
+
+#score-display{
+  text-align: center;
+  position: relative;
+  width: 40px;
+  top: 310px;
+  left: 742px;
+  color: red;
+}
+
+.score-container{
+  align-content: center;
+}
+
+#score{
+  position: relative;
+
+}

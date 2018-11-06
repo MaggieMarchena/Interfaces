@@ -42,7 +42,7 @@ class Snack {
     setTimeout(function() {
       element.classList.remove("snack1", "snack2", "snack3");
       element.classList.remove('snackpass');
-    }, 500);
+    }, 600);
   }
 
   collide(){

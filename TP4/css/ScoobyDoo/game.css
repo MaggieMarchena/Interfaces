@@ -7,6 +7,10 @@
   z-index: 0;
 }
 
+.game-idle{
+  background-image: url("../../images/forest-background.png");
+}
+
 .game-on{
   background-image: url("../../images/forest-background.png");
   animation: background-move 3s steps(60) infinite;
