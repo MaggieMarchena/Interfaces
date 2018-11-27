@@ -8,11 +8,11 @@
 }
 
 .game-idle{
-  background-image: url("../../images/forest-background.png");
+  background-image: url("../../images/Scooby-Doo/forest-background.png");
 }
 
 .game-on{
-  background-image: url("../../images/forest-background.png");
+  background-image: url("../../images/Scooby-Doo/forest-background.png");
   animation: background-move 3s steps(60) infinite;
 }
 
@@ -21,5 +21,5 @@
 }
 
 .game-end{
-  background-image: url("../../images/forest-background.png");
+  background-image: url("../../images/Scooby-Doo/forest-background.png");
 }

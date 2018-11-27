@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Game Central</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/ScoobyDoo/game.css">
+    <link rel="stylesheet" href="css/ScoobyDoo/scooby.css">
+    <link rel="stylesheet" href="css/ScoobyDoo/ghost.css">
+    <link rel="stylesheet" href="css/ScoobyDoo/snack.css">
+    <link rel="stylesheet" href="css/page.css">
+  </head>
+
+  <body>
+
+    <div class="container-fluid">
+
+      <header>
+
+        <div class="row">
+          <div class="col-3">
+            <div class="row">
+              <div class="col-3 container-logo">
+                <img class="logoGC img-fluid" src="images/logo.png" alt="">
+              </div>
+              <div class="col-9 container-name">
+                <img class="nameGC img-fluid" src="images/name.png" alt="">
+              </div>
+            </div>
+
+          </div>
+          <div class="col-6">
+            <div class="row container-search">
+              <div class="col-10 container-search-input">
+                <input id="search-input" class="form-control input-lg" placeholder="Search games, reviews, users..." autocomplete="off" spellcheck="false" autocorrect="off" tabindex="1">
+              </div>
+              <div class="col-2 container-filter">
+                <button class="btn btn-filter" type="button">
+                  <i class="fas fa-filter"></i>
+                  <a class="dropdown-toggle" href="" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div class="dropdown-menu" aria-labelledby="dropdown01">
+                      <select class="form-control">
+                        <option>Category</option>
+                      </select>
+                      <select class="form-control">
+                        <option>Age</option>
+                      </select>
+                      <select class="form-control">
+                        <option>Pricing</option>
+                      </select>
+                      <select class="form-control">
+                        <option>Play mode</option>
+                      </select>
+                    </div>
+                  </a>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="row container-menu">
+              <div class="col-2">
+
+              </div>
+              <div class="col-4 language">
+                <h4>
+                  <a class="nav-link dropdown-toggle" href="" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">EN</a>
+                  <div class="dropdown-menu" aria-labelledby="dropdown02">
+                    <a class="dropdown-item" href="#">Español</a>
+                    <a class="dropdown-item" href="#">English</a>
+                  </div>
+                </h4>
+
+              </div>
+              <div class="col-6 user">
+                <h4>Maggie1411 <i class="fas fa-bars"></i></h4>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row container-nav">
+          <div class="col">
+            <h4 class="nav-topic">HOT DEALS</h4>
+          </div>
+          <div class="col">
+            <h4 class="nav-topic">Play Online</h4>
+          </div>
+          <div class="col">
+            <h4 class="nav-topic">Download</h4>
+          </div>
+          <div class="col">
+            <h4 class="nav-topic">Reviews</h4>
+          </div>
+        </div>
+
+      </header>
+
+      <section class="container-breadcrumb">
+        <div class="row">
+          <div class="col-1">
+
+          </div>
+          <div class="col-10">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a class="breadcrumb-item" href="#">Home</a></li>
+              <li class="breadcrumb-item"><a class="breadcrumb-item" href="#">Featured</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Scooby Doo in the forest</li>
+            </ol>
+          </div>
+          <div class="col-1">
+
+          </div>
+        </div>
+
+      </section>
+
+      <section class="game">
+
+        <div class="row container-section">
+          <div class="col-1">
+
+          </div>
+          <div class="col-10">
+            <div class="card">
+              <div class="card-header">
+                <div class="row">
+                  <div class="col-8">
+                    Scooby Doo in the forest
+                  </div>
+                  <div class="col-4 container-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="row container-fluid container-within-card-body">
+                  <div class="col-9 container-game">
+                    <div class="container justify-content-center" id="game-container">
+                      <div class="" id="scooby">
+
+                      </div>
+                      <div class="" id="ghost">
+
+                      </div>
+                      <div class="" id="snack">
+
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-3 container-game-info">
+                    <div class="row container-description">
+                      <div class="col-12">
+                        <p>Scooby wandered into the forest, help him find all the Scooby-Snacks! But be careful, don't let the ghosts get him!</p>
+                      </div>
+                    </div>
+                    <div class="row container-new-game-button">
+                      <div class="col-12">
+                        <button class="new-game" type="button" name="new-game" id="new-game">NEW GAME</button>
+                      </div>
+                    </div>
+                    <div class="row container-score">
+                      <div class="col-12">
+                        <div class="score-display">
+                          <div>
+                            <h4 id="score"></h4>
+                          </div>
+                          <h4>Points</h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row container-fluid container-within-card-body">
+                  <div class="row inner-title container-fluid container-within-card-body">
+                    <div class="col-12">
+                      How to Play
+                    </div>
+                  </div>
+                  <div class="row container-fluid container-within-card-body container-game-info">
+                    <div class="col-9">
+                      <div class="row">
+                        <div class="col-2">
+
+                        </div>
+                        <div class="col-8">
+                          <ul>
+                            <li class="info-item"><i class="far fa-dot-circle"></i> Use right arrow to make Scooby jump to the right</li>
+                            <li class="info-item"><i class="far fa-dot-circle"></i> Use left arrow to make Scooby jump to the left</li>
+                          </ul>
+                        </div>
+                        <div class="col-2">
+
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-3">
+                      <div class="row">
+                        <div class="col-5">
+
+                        </div>
+                        <div class="col-2">
+                          <ul>
+                            <li><i class="fas fa-arrow-circle-right"></i></li>
+                            <li><i class="fas fa-arrow-circle-left"></i></li>
+                          </ul>
+                        </div>
+                        <div class="col-5">
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-1">
+
+          </div>
+        </div>
+
+        <div class="row section-container">
+          <div class="col-2 section-container">
+
+          </div>
+
+          <div class="col-1 section-container">
+
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="js/GamePage.js" charset="utf-8"></script>
+    <script src="js/constants.js" charset="utf-8"></script>
+    <script src="js/game.js" charset="utf-8"></script>
+    <script src="js/scooby.js" charset="utf-8"></script>
+    <script src="js/ghost.js" charset="utf-8"></script>
+    <script src="js/snack.js" charset="utf-8"></script>
+    <script src="js/popper.min.js" charset="utf-8"></script>
+    <script src="js/holder.min.js" charset="utf-8"></script>
+  </body>
+
+</html>

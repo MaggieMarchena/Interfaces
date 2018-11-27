@@ -1,0 +1,198 @@
+body{
+  background-color: #212121;
+  font-family: "Roboto", sans-serif;
+}
+
+.container-logo, .container-name, .container-menu{
+  background-color: #b0001c;
+  position: relative;
+}
+
+.container-logo, .container-name, .container-search, .container-menu{
+  height: 55px;
+}
+
+.container-logo, .container-name{
+  margin: 0;
+}
+
+.container-logo{
+  padding-left: 5px;
+}
+
+.container-name{
+  padding: 0;
+}
+
+.logoGC, .nameGC{
+  border: 0;
+  float: left;
+  padding: 0;
+  position: relative;
+}
+
+.logoGC{
+  height: 55px;
+  width: 70px;
+}
+
+.nameGC{
+  height: 40px;
+  padding-top: 15px;
+  width: 240px;
+}
+
+.container-search, .container-nav{
+  background-color: #ff173c;
+  position: relative;
+}
+
+.container-search-input, .container-filter{
+  position: relative;
+  top: 8px;
+}
+
+.container-search-input{
+  left: 25px;
+}
+
+.container-filter{
+  left: 5px;
+  padding-left: 5px;
+}
+
+.btn-filter, #dropdown01{
+  background-color: white;
+  color: black;
+}
+
+.dropdown-toggle ::hover, ::after{
+  color: black;
+}
+
+.language, .user{
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.language h4, .user h4{
+  font-size: 1.25em;
+}
+
+.language{
+  top: 4px;
+}
+
+.user{
+  right: 0;
+  top: 12px;
+}
+
+#dropdown02{
+  background-color: #b0001c;
+  color: #ffc900;
+}
+
+.container-nav, .container-game-info{
+  text-align: center;
+}
+
+.nav-topic, .language, .user{
+  color: #ffc900;
+}
+
+.nav-topic{
+  padding-top: 5px;
+}
+
+.container-breadcrumb{
+  border: 0;
+  margin-top: 10px;
+  position: relative;
+}
+
+.breadcrumb{
+  background-color: #212121;
+  position: relative;
+}
+
+.breadcrumb-item{
+  color: #ffc900;
+}
+
+.breadcrumb-item.active{
+  color: #ffd849;
+}
+
+.breadcrumb-item+.breadcrumb-item::before {
+  color: #ffc900;
+  content: ">";
+}
+
+.card{
+  border-color: #ff0028;
+  border-style: solid;
+}
+
+.card-header{
+  background-color: #ff0028;
+  color: #ffc900;
+  font-size: 25px;
+}
+
+.container-rating{
+  text-align: right;
+}
+
+.card-body{
+  padding: 0;
+}
+
+.container-within-card-body{
+  margin: 0;
+  padding: 0;
+}
+
+.container-game{
+  background-color: black;
+  padding: 3em;
+}
+
+.container-game-info{
+  background-color: #424242;
+  color: white;
+  padding-top: 1em;
+  text-align: justify;
+  text-align-last: center;
+  vertical-align: middle;
+}
+
+.container-description{
+  padding-top: 1em;
+}
+
+.container-new-game-button{
+  padding-top: 3em;
+}
+
+.new-game{
+  background-color: #ffc900;
+  border: 1px solid #ffc900;
+  border-radius: 50px;
+  color: black;
+  font-weight: bold;
+  padding: 0.25em;
+}
+
+.new-game:focus {outline:0;}
+
+.container-score{
+  color: #b0001c;
+  padding-top: 4em;
+}
+
+.inner-title{
+  background-color: #b0001c;
+  color: white;
+}

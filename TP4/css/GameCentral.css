@@ -3,19 +3,38 @@ body{
 }
 
 #page-container{
-  width: 98%;
+  width: 100%;
 }
 
 #header{
-  height: 130px;
   width: 100%;
-  background-image: url("../images/header.png");
-  background-size:contain;
-  background-repeat: no-repeat;
-  background-position: center;
+}
+
+.logoGC, .nameGC{
+  position: relative;
+  float: left;
+  height: 45px;
+  padding: 0;
+  border: 0;
+}
+
+.logoGC{
+  width: 70px;
+}
+
+.nameGC{
+  width: 240px;
+}
+
+.searchBar{
+  font-family: FontAwesome;
+  border-radius: 30px;
+  width: 530px;
 }
 
 #game-card{
+  position: relative;
+  float: left;
   width: 900px;
   height: 568px;
   background-image: url("../images/game-card.png");
@@ -23,7 +42,7 @@ body{
 }
 
 #new-game{
-  position: absolute;
+  position: relative;
   top: 255px;
   left: 735px;
   color: red;
