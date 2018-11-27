@@ -372,3 +372,77 @@ body{
   position: relative;
   top: 25px;
 }
+
+.container-title{
+  text-align-last: left;
+}
+
+.login, .login:hover{
+  color: #ffc900;
+}
+
+.home{
+  text-align-last: left;
+}
+
+.container-game-img{
+  background-color: black;
+  text-align: center;
+}
+
+.game-img{
+  padding: 20px 20px 0 20px;;
+}
+
+.container-title{
+  color: #ff0028;
+  font-size: 1.2em;
+}
+
+.container-game-button{
+  padding: 10px 30px 5px 30px;
+}
+
+.container-price{
+  color: #ff0028;
+}
+
+.button-move-left, .button-move-right{
+  background-color: white;
+  border-radius: 50%;
+  color: black;
+  height: 35px;
+  opacity: 0.5;
+  position: relative;
+  text-align-last: center;
+  width: 35px;
+}
+
+.button-move-left{
+  left: 10px;
+  top: 170px;
+}
+
+.button-move-right{
+  left: 80px;
+}
+
+.container-dots{
+  padding-top: 5px;
+}
+
+.current{
+  border: 1px solid black;
+  color: white;
+  opacity: 0.3;
+}
+
+.next{
+  border: 1px solid black;
+  color: white;
+}
+
+.img-stretch{
+  height: 350px;
+  width: 100%;
+}
