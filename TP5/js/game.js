@@ -21,6 +21,10 @@ class Game {
     return [this.ghostIntervalId, this.snackIntervalID];
   }
 
+  getState(){
+    return this.state;
+  }
+
   start(){
     this.moveAllowed = true;
     this.score = 0;
@@ -232,7 +236,7 @@ function addEventListeners(scoobyLaugh) {
 function keyDown(e) {
   let key = e.keyCode;
 
-  if (game != null){
+  if (game != null && game.getState() != "end"){
     if (key == ARROW_RIGHT) {
       e.preventDefault();
       game.arrowRight();

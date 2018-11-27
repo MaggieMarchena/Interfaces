@@ -3,6 +3,10 @@ body{
   font-family: "Roboto", sans-serif;
 }
 
+.container-section{
+  margin: 2em;
+}
+
 .container-logo, .container-name, .container-menu{
   background-color: #b0001c;
   position: relative;
@@ -137,11 +141,13 @@ body{
 
 .card-header{
   background-color: #ff0028;
-  color: #ffc900;
+  color: black;
   font-size: 25px;
+  font-weight: bold;
 }
 
 .container-rating{
+  color: #ffc900;
   text-align: right;
 }
 
@@ -150,6 +156,7 @@ body{
 }
 
 .container-within-card-body{
+  height: auto;
   margin: 0;
   padding: 0;
 }
@@ -195,4 +202,106 @@ body{
 .inner-title{
   background-color: #b0001c;
   color: white;
+}
+
+.inner-text{
+  padding-top: 5px;
+}
+
+.container-tab{
+  background-color: #424242;
+  color: white;
+  height: 60px;
+}
+
+.container-icon{
+  align-content: center;
+  padding-top: 10px;
+  vertical-align: middle;
+}
+
+#tab-comments{
+  border-bottom: 2px solid black;
+}
+
+#tab-goals-rewards{
+  border-right: 2px solid white;
+}
+
+#tab-tutorials{
+  border-right: 2px solid white;
+  border-top: 2px solid black;
+}
+
+#tab-comments.active, #tab-top-players.active{
+  background-color: #757575;
+  border-top: 2px solid white;
+  border-bottom: 2px solid white;
+}
+
+#tab-comments.inactive{
+  border-right: 2px solid white;
+}
+
+.tab:hover, .tab:active, .tab:visited{
+  text-decoration: none;
+}
+
+.container-tab-content{
+  background-color: #757575;
+  border-top: 2px solid white;
+  left: 0;
+  height: 100%;
+  position: relative;
+  top: 0;
+}
+
+.container-tab-content.inactive{
+  display: none;
+}
+
+.container-tab-content.active{
+  display: block;
+}
+
+#content-top-players{
+  padding-top: 7px;
+}
+
+.container-player-info{
+  color: white;
+  padding: 3px 60px 3px 60px;
+}
+
+.container-player-number{
+  padding-top: 5px;
+}
+
+.top-player-number{
+  background-color: #ffc900;
+  border: 2px solid black;
+  border-radius: 50%;
+  color: black;
+  font-size: 1.5em;
+  font-weight: bold;
+  height: 50px;
+  width: 50px;
+}
+
+.top-player-number:focus{
+  outline: 0;
+}
+
+.avatar{
+  max-height: 59px;
+}
+
+.container-player-info h3{
+  color: #b0001c;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.container-player-info h4{
+  font-size: 0.75em;
 }
