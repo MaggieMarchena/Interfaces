@@ -202,6 +202,7 @@ body{
 .inner-title{
   background-color: #b0001c;
   color: white;
+  width: 100%;
 }
 
 .inner-text{
@@ -239,7 +240,7 @@ body{
   border-bottom: 2px solid white;
 }
 
-#tab-comments.inactive{
+#tab-comments.inactive, #tab-top-players.inactive{
   border-right: 2px solid white;
 }
 
@@ -265,16 +266,16 @@ body{
 }
 
 #content-top-players{
-  padding-top: 7px;
+  padding-top: 10px;
 }
 
-.container-player-info{
+.container-player-info, .container-comment{
   color: white;
-  padding: 3px 60px 3px 60px;
+  padding: 3px 60px 1px 60px;
 }
 
 .container-player-number{
-  padding-top: 5px;
+  padding-top: 10px;
 }
 
 .top-player-number{
@@ -294,6 +295,11 @@ body{
 
 .avatar{
   max-height: 59px;
+  padding-top: 10px;
+}
+
+.container-player-info:hover{
+  transform: scale3d(1.1, 1.1, 1.3);
 }
 
 .container-player-info h3{
@@ -304,4 +310,65 @@ body{
 
 .container-player-info h4{
   font-size: 0.75em;
+}
+
+.border-dotted{
+  border-bottom: 1px dotted white;
+}
+
+.container-player-ranking{
+  padding-left: 10px;
+  padding-right: 20px;
+}
+
+.container-player-ranking-symbol{
+  padding: 15px;
+}
+
+.container-player-ranking-info{
+  padding: 22px;
+}
+
+.fa-arrow-up{
+  color: #07f404;
+}
+
+.fa-arrow-down{
+  color: #ff173c;
+}
+
+.container-comment{
+  padding-bottom: 0;
+  padding-top: 5px;
+}
+
+.button-comment{
+  background-color: #ffc900;
+  border: 1px solid #ffc900;
+  color: black;
+}
+
+.img-similar{
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.divider{
+  border-bottom: 2px solid #ff0028;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  top: 2em;
+  width: 100%;
+}
+
+.no-border{
+  border: 0;
+}
+
+.footer{
+  position: relative;
+  top: 25px;
 }
