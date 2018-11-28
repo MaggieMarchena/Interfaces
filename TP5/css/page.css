@@ -468,3 +468,61 @@ body{
 .button-game-hidden{
   opacity: 0;
 }
+
+.container-filters{
+  background-color: #424242;
+  color: white;
+  padding-left: 110px;
+  padding-top: 20px;
+  text-align: left;
+}
+
+.container-filters h3{
+  color: #ffc900;
+  font-size: 1.5em;
+}
+
+.container-list{
+  background-color: #424242;
+  color: white;
+  padding: 5px 20px 5px 20px;
+}
+
+.thead-game-list{
+  font-size: 1.3em;
+  font-weight: bolder;
+}
+
+.game-list-link:hover{
+  color: white;
+  text-decoration: none;
+}
+
+.game-list-link{
+  color: white;
+}
+
+.pricing{
+  color: #ff0028;
+  font-weight: bold;
+}
+
+.nav-link-able{
+  color: #ffc900;
+}
+
+.nav-link-able:hover{
+  color: #ffc900;
+  text-decoration: none;
+}
+
+.container-nav-link{
+  transform: rotateY(0deg);
+	transition-duration: 0.5s;
+	transition-property: transform;
+}
+
+.container-nav-link:hover{
+  perspective: 5000;
+  transform: rotateY(40deg);
+}

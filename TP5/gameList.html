@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Game Central</title>
+    <title>GameCentral</title>
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="css/page.css">
   </head>
   <body>
-
     <div class="container-fluid">
 
       <header>
@@ -75,7 +74,7 @@
 
               </div>
               <div class="col-6 user">
-                <a class="login" href="homeUser.html" id="login"><h4>Login / Join!</h4></a>
+                <h4>Maggie1411 <i class="fas fa-bars"></i></h4>
               </div>
             </div>
           </div>
@@ -98,8 +97,25 @@
 
       </header>
 
-      <section class="featured">
+      <section class="container-breadcrumb">
+        <div class="row">
+          <div class="col-1">
 
+          </div>
+          <div class="col-10">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a class="breadcrumb-item" href="#">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">HOT DEALS</li>
+            </ol>
+          </div>
+          <div class="col-1">
+
+          </div>
+        </div>
+
+      </section>
+
+      <section class="filter">
         <div class="row container-section">
           <div class="col-1">
 
@@ -107,79 +123,45 @@
           <div class="col-10">
             <div class="card">
               <div class="card-header">
-                <div class="row">
-                  <div class="col-8">
-                    FEATURED
-                  </div>
-                  <div class="col-4">
-
-                  </div>
-                </div>
+                Filter this list
               </div>
-              <div class="card-body">
+              <div class="card-body container-filters">
                 <div class="row container-fluid container-within-card-body">
-                  <div class="col-9 container-game-img">
-                    <div class="row">
-                      <div class="col-1">
-                        <button class="button-move-left" type="button" name="button"><i class="fas fa-caret-left"></i></button>
-                      </div>
-                      <div class="col-10">
-                        <div class="row">
-                          <div class="col">
-                            <img class="game-img img-fluid" src="images/scooby.png" alt="">
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col container-dots">
-                            <i class="current fas fa-circle"></i>
-                            <i class="next fas fa-circle"></i>
-                            <i class="next fas fa-circle"></i>
-                            <i class="next fas fa-circle"></i>
-                            <i class="next fas fa-circle"></i>
-                          </div>
-                        </div>
-
-                      </div>
-                      <div class="col-1">
-                      </div>
-                    </div>
-
+                  <div class="col container-within-card-body">
+                    <ul>
+                      <h3>Category</h3>
+                      <li><input type="checkbox" name="" value=""> Arcade</li>
+                      <li><input type="checkbox" name="" value=""> Role</li>
+                      <li><input type="checkbox" name="" value=""> Puzzle</li>
+                      <li><input type="checkbox" name="" value=""> Action</li>
+                      <li><input type="checkbox" name="" value=""> Combat</li>
+                    </ul>
                   </div>
-                  <div class="col-3 container-game-info">
-                    <div class="row container-title">
-                      <div class="col">
-                        Scooby Doo in the forest
-                      </div>
-                    </div>
-                    <div class="row home container-description">
-                      <div class="col-12">
-                        <p>Scooby wandered into the forest, help him find all the Scooby-Snacks! But be careful, don't let the ghosts get him!</p>
-                        <div class="home container-rating">
-                          <i class="fas fa-star"></i>
-                          <i class="fas fa-star"></i>
-                          <i class="fas fa-star"></i>
-                          <i class="fas fa-star"></i>
-                          <i class="far fa-star"></i>
-                          <button class="button-move-right" type="button" name="button"><i class="fas fa-caret-right"></i></button>
-                        </div>
-                        <div class="container-category">
-                          Arcade
-                        </div>
-                        <div class="container-age">
-                          6+
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row container-game-button">
-                      <div class="col-12">
-                        <a href="gamePage.html"><button class="new-game play-now" type="button" name="new-game">PLAY NOW!</button></a>
-                      </div>
-                    </div>
-                    <div class="row container-price">
-                      <div class="col-12">
-                        <h4>Only $20</h4>
-                      </div>
-                    </div>
+                  <div class="col container-within-card-body">
+                    <ul>
+                      <h3>Age</h3>
+                      <li><input type="checkbox" name="" value=""> +18</li>
+                      <li><input type="checkbox" name="" value=""> 15 to 18</li>
+                      <li><input type="checkbox" name="" value=""> 10 to 14</li>
+                      <li><input type="checkbox" name="" value=""> 7 to 13</li>
+                      <li><input type="checkbox" name="" value=""> 3 to 6</li>
+                    </ul>
+                  </div>
+                  <div class="col container-within-card-body">
+                    <ul>
+                      <h3>Pricing</h3>
+                      <li><input type="checkbox" name="" value=""> Over $20</li>
+                      <li><input type="checkbox" name="" value=""> $10 to $20</li>
+                      <li><input type="checkbox" name="" value=""> Under $10</li>
+                      <li><input type="checkbox" name="" value=""> Free</li>
+                    </ul>
+                  </div>
+                  <div class="col container-within-card-body">
+                    <ul>
+                      <h3>Play mode</h3>
+                      <li><input type="checkbox" name="" value=""> Play online</li>
+                      <li><input type="checkbox" name="" value=""> Download</li>
+                    </ul>
                   </div>
                 </div>
               </div>
@@ -189,55 +171,69 @@
 
           </div>
         </div>
-
       </section>
 
-      <section class="news-rankings">
+      <section class="game-list">
         <div class="row container-section">
           <div class="col-1">
 
           </div>
           <div class="col-10">
-            <div class="row">
-              <div class="col-6">
-                <div class="card">
-                  <div class="card-header">
-                    NEWS
-                  </div>
-                  <div class="card-body">
-                    <div class="row container-fluid container-within-card-body">
-                      <div class="col container-within-card-body">
-                        <img class="img-stretch" src="images/news.png" alt="">
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            <div class="card">
+              <div class="card-header">
+                HOT DEALS
               </div>
-              <div class="col-3">
-                <div class="card">
-                  <div class="card-header">
-                    BEST 20
-                  </div>
-                  <div class="card-body">
-                    <div class="row container-fluid container-within-card-body">
-                      <div class="col container-within-card-body">
-                        <img class="img-stretch" src="images/best.png" alt="">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-3">
-                <div class="card">
-                  <div class="card-header">
-                    LATEST 20
-                  </div>
-                  <div class="card-body">
-                    <div class="row container-fluid container-within-card-body">
-                      <div class="col container-within-card-body">
-                        <img class="img-stretch" src="images/latest.png" alt="">
-                      </div>
-                    </div>
+              <div class="card-body">
+                <div class="row container-fluid container-within-card-body">
+                  <div class="col container-within-card-body container-list">
+                    <table class="table table-striped">
+                      <thead class="thead-game-list">
+                        <tr>
+                          <th scope="col">Title</th>
+                          <th scope="col">Category</th>
+                          <th scope="col">Age</th>
+                          <th scope="col">Pricing</th>
+                          <th scope="col">Play mode</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                          <tr class="game-list-item">
+                            <td>Connect4</td>
+                            <td>Arcade</td>
+                            <td>6+</td>
+                            <td class="pricing">$20</td>
+                            <td>Play online</td>
+                          </tr>
+                          <tr class="game-list-item">
+                            <td><a class="game-list-link" href="gamePage.html">Scooby Doo in the forest</a></td>
+                            <td>Arcade</td>
+                            <td>6+</td>
+                            <td class="pricing">$20</td>
+                            <td>Play Online</td>
+                          </tr>
+                          <tr class="game-list-item">
+                            <td>Assassin's Creed</td>
+                            <td>Role</td>
+                            <td>16+</td>
+                            <td class="pricing">$10</td>
+                            <td>Play Online</td>
+                          </tr>
+                          <tr class="game-list-item">
+                            <td>The Witcher</td>
+                            <td>Role</td>
+                            <td>16+</td>
+                            <td class="pricing">$30</td>
+                            <td>Download</td>
+                          </tr>
+                          <tr class="game-list-item">
+                            <td>Call of Duty - Black ops 4</td>
+                            <td>Role</td>
+                            <td>16+</td>
+                            <td class="pricing">$25</td>
+                            <td>Download</td>
+                          </tr>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
